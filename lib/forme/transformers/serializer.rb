@@ -168,4 +168,45 @@ module Forme
       end
     end
   end
+  
+  # Serializer class that converts tags to BS3 bootstrap tags.
+  #
+  # Registered at :bs3.
+  class Serializer::Bootstrap3 < Serializer
+    Forme.register_transformer(:serializer, :bs3, new)
+
+    def call(tag)
+      # All textual <input>, <textarea>, and <select> elements with .form-control
+      case tag
+      when Tag
+        
+        case tag.type.to_sym
+        when :input
+          case tag.attr[:type].to_sym
+          when :radio, :checkbox, :file, :submit
+            # do nothing
+          else
+            klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+            tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+          end
+          "<#{tag.type}#{attr_html(tag.attr)}/>"
+        when :textarea
+          klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+          tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+          "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
+        when :select
+          klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+          tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+          "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
+        else
+          super
+        end
+      else
+        super
+      end
+    end
+
+  end
+
+
 end

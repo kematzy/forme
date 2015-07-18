@@ -15,4 +15,29 @@ module Forme
       [tag, input.tag(:span, attr, input.opts[:error])]
     end
   end
+  
+  
+  # BS3 Boostrap formatted error handler which adds a span tag 
+  # with "help-block with-error" classes for the error message.
+  # 
+  # Uses [github.com/1000hz/bootstrap-validator] formatting.
+  # 
+  # Note! The default "error" class on the input is being removed.
+  #
+  # Registered as :bs3.
+  class ErrorHandler::Bootstrap3 < ErrorHandler
+    Forme.register_transformer(:error_handler, :bs3, new)
+
+    # Return tag with error message span tag after it.
+    def call(tag, input)
+      # delete .error on tag for full BS3 support
+      tag.attr[:class] = tag.attr[:class].gsub(/\s*error\s*/,'')
+      tag.attr.delete(:class) if tag.attr[:class].empty?
+      
+      attr = input.opts[:error_attr]
+      attr = attr ? attr.dup : {}
+      Forme.attr_classes(attr, 'help-block with-error')
+      [tag, input.tag(:span, attr, input.opts[:error])]
+    end
+  end
 end

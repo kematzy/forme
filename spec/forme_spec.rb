@@ -594,7 +594,7 @@ describe "Forme plain forms" do
   it "should format dates, times, and datetimes in ISO format" do
     @f.tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.must_equal '<div foo="2011-06-05"></div>'
     @f.tag(:div, :foo=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal '<div foo="2011-06-05T04:03:02.000000"></div>'
-    @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.must_match /<div foo="2011-06-05T04:03:02.000000"><\/div>/
+    @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.must_match /<div foo="2011-06-05T04:03:02.000000"><\/div>/ #/
   end
 
   it "should format bigdecimals in standard notation" do
@@ -1084,5 +1084,96 @@ describe "Forme.form DSL" do
     Forme.form({}, :inputs=>[:text, :textarea], :button=>'Foo').to_s.must_equal  '<form><fieldset class="inputs"><input type="text"/><textarea></textarea></fieldset><input type="submit" value="Foo"/></form>'
   end
 
+end
+
+describe "BS3" do
+  
+  it "wrapper: bs3 wraps tags in a div.form-group" do
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea).to_s.must_equal '<div class="form-group"><textarea></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar').to_s.must_equal '<div class="form-group"><textarea id="bar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: 'custom').to_s.must_equal '<div class="form-group"><textarea class="custom" id="bar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: 'form-group').to_s.must_equal '<div class="form-group"><textarea class="form-group" id="bar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: :'form-group').to_s.must_equal '<div class="form-group"><textarea class="form-group" id="bar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, wrapper_attr: { id: 'bar', class: 'form-group'}, id: 'foobar').to_s.must_equal '<div class="form-group" id="bar"><textarea id="foobar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, wrapper_attr: { id: 'bar', class: :'form-group'}, id: 'foobar').to_s.must_equal '<div class="form-group" id="bar"><textarea id="foobar"></textarea></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'foobaz', wrapper_attr: { id: 'baz', class: 'form-group'}).to_s.must_equal '<div class="form-group" id="baz"><textarea id="foobaz"></textarea></div>'
+  end
+
+  it "serializer: bs3 adds '.form-control' to input, textarea & select tags" do
+    Forme::Form.new(:serializer=>:bs3).input(:textarea).to_s.must_equal '<textarea class="form-control"></textarea>'
+    Forme::Form.new(:serializer=>:bs3).input(:textarea, class: 'custom').to_s.must_equal '<textarea class="form-control custom"></textarea>'
+    Forme::Form.new(:serializer=>:bs3).input(:textarea, class: 'form-control', id: 'bar').to_s.must_equal '<textarea class="form-control" id="bar"></textarea>'
+
+    Forme::Form.new(:serializer=>:bs3).input(:password).to_s.must_equal '<input class="form-control" type="password"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:password, class: 'custom').to_s.must_equal '<input class="form-control custom" type="password"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:password, class: 'form-control', id: 'bar').to_s.must_equal '<input class="form-control" id="bar" type="password"/>'
+
+    Forme::Form.new(:serializer=>:bs3).input(:select).to_s.must_equal '<select class="form-control"></select>'
+    Forme::Form.new(:serializer=>:bs3).input(:select, class: 'custom').to_s.must_equal '<select class="form-control custom"></select>'
+    Forme::Form.new(:serializer=>:bs3).input(:select, class: 'form-control', id: 'bar').to_s.must_equal '<select class="form-control" id="bar"></select>'
+
+    Forme::Form.new(:serializer=>:bs3).input(:checkbox).to_s.must_equal '<input type="checkbox"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:radio).to_s.must_equal '<input type="radio"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:file).to_s.must_equal '<input type="file"/>'
+
+    f = Forme::Form.new(:config=>:bs3)
+    f.input(:text, data: {pattern: "^([_A-z0-9]){3,}$" }, class: 'custom', maxlength: "20", placeholder: 'foobar', id: 'foo', required: true ).to_s.must_equal '<div class="form-group"><input class="form-control custom" data-pattern="^([_A-z0-9]){3,}$" id="foo" maxlength="20" placeholder="foobar" required="required" type="text"/></div>'
+  end
+
+  it "error_handler: bs3" do
+    Forme::Form.new(:error_handler=>:bs3).input(:textarea, error: 'bar', id: 'foo').to_s.must_equal '<textarea id="foo"></textarea><span class="help-block with-error">bar</span>'
+    Forme::Form.new(:error_handler=>:bs3).input(:textarea, error: 'bar', id: 'foo', class: 'custom').to_s.must_equal '<textarea class="custom" id="foo"></textarea><span class="help-block with-error">bar</span>'
+
+    f = Forme::Form.new(:config=>:bs3)
+    f.input(:textarea, id: 'foo', class: 'custom', error: 'bar', value: 'foobar').to_s.must_equal '<div class="form-group"><textarea class="form-control custom" id="foo">foobar</textarea><span class="help-block with-error">bar</span></div>'
+    f.input(:textarea, id: 'foo', class: 'custom', error: nil, value: 'foobar').to_s.must_equal '<div class="form-group"><textarea class="form-control custom" id="foo">foobar</textarea></div>'
+  end
+
+  it "config: bs3 outputs Bootstrap examples code" do
+    # f = Forme::Form.new(config: :bs3)
+    #
+    # # Basic form example [http://getbootstrap.com/css/#forms-example]
+    # f.form do |fo|
+    #   fo.input(:email, id: 'exampleInputEmail1', placeholder: 'Email', label: "Email address")
+    #   fo.input(:password, id: 'exampleInputPassword1', placeholder: 'Password', label: "Password")
+    #   fo.input(:file, id: 'exampleInputFile', label: "File Input") { |fi| fi.tag(:p, class: 'help-block', value: 'Example block-level help text here.')}
+    #   fo.input(:checkbox, label: "Check me out")
+    #   fo.tag(:button, class: 'btn btn-default', value: 'Submit' )
+    # end.to_s.must_equal '<form><div class="form-group"><label for="exampleInputEmail1">Email address</label><input class="form-control" id="exampleInputEmail1" placeholder="Email" type="email"/></div><div class="form-group"><label for="exampleInputPassword1">Password</label><input class="form-control" id="exampleInputPassword1" placeholder="Password" type="password"/></div><div class="form-group"><label for="exampleInputFile">File input</label><input id="exampleInputFile" type="file"/><p class="help-block">Example block-level help text here.</p></div><div class="checkbox"><label><input type="checkbox"> Check me out</label></div><button type="submit" class="btn btn-default">Submit</button></form>'
+    #
+    #
+    # # DIFFs ie: failing parts of Forme BS3 output compared with official BS3 documentation
+    #
+    # f.input(:file, id: 'exampleInputFile', label: "File Input") do |fi|
+    #   fi.tag(:p, class: 'help-block', value: 'Example block-level help text here.')
+    # end.to_s.must_equal '<div class="form-group"><label for="exampleInputFile">File input</label><input id="exampleInputFile" type="file"/><p class="help-block">Example block-level help text here.</p></div>'
+    #
+    # f.input(:checkbox, label: "Check me out").to_s.must_equal '<div class="checkbox"><label><input type="checkbox"> Check me out</label></div>'
+    #
+    # f.tag(:button, class: 'btn btn-default', value: 'Submit').to_s.must_equal '<button type="submit" class="btn btn-default">Submit</button>'
+    
+    
+    f = Forme::Form.new(config: :bs3)
+    # Inline form example [http://getbootstrap.com/css/#forms-inline]
+    f.form(class: 'form-inline') do |fo|
+      fo.input(:text, id: 'exampleInputName2', placeholder: 'Name', label: "Name")
+      fo.input(:password, id: 'inputPassword', placeholder: 'Password', label: 'Password', label_attr: { class: 'sr-only' })
+      fo.button(class: 'btn btn-default', value: 'Confirm identity' )
+    end.to_s.must_equal '<form class="form-inline"><div class="form-group"><label for="exampleInputName2">Name</label><input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe"></div><div class="form-group"><label for="exampleInputEmail2">Email</label><input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com"></div><button type="submit" class="btn btn-default">Send invitation</button></form>'
+    
+    # DIFFs ie: failing parts of Forme BS3 output compared with official BS3 documentation
+
+    # Wanted:  <label class="sr-only">Email</label>
+    # Got:     <label class="sr-only label-before" for="inputEmail">Email</label>
+    f.input(:text, id: 'inputEmail', placeholder: 'Email', label: "Email", label_attr: { class: 'sr-only'}).to_s.must_equal '<div class="form-group"><label class="sr-only">Email</label><input class="form-control" id="inputEmail" placeholder="Email" type="text"/></div>'
+
+    # Wanted:  <label for="inputPassword2" class="sr-only">Password</label>
+    # Got:     <label class="sr-only label-before" for="inputPassword">Password</label>
+    f.input(:password, id: 'inputPassword', placeholder: 'Password', label: 'Password', label_attr: { class: 'sr-only' }).to_s.must_equal
+    
+    # Wanted:  <button type="submit" class="btn btn-default">Confirm identity</button>
+    # Got:     <div class="form-group"><input class="btn btn-default" type="submit" value="Confirm identity"/></div>
+  end
+  
 end
 
