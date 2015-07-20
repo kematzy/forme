@@ -18,7 +18,7 @@ module Forme
   
   
   # BS3 Boostrap formatted error handler which adds a span tag 
-  # with "help-block with-error" classes for the error message.
+  # with "help-block with-errors" classes for the error message.
   # 
   # Uses [github.com/1000hz/bootstrap-validator] formatting.
   # 
@@ -33,11 +33,29 @@ module Forme
       # delete .error on tag for full BS3 support
       tag.attr[:class] = tag.attr[:class].gsub(/\s*error\s*/,'')
       tag.attr.delete(:class) if tag.attr[:class].empty?
-      
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
-      Forme.attr_classes(attr, 'help-block with-error')
-      [tag, input.tag(:span, attr, input.opts[:error])]
+      Forme.attr_classes(attr, 'help-block with-errors')
+
+      case tag.type.to_sym
+      when :input
+        case tag.attr[:type].to_sym
+        when :submit, :reset, :button
+          [tag]
+        when :checkbox, :radio
+          # TODO: Bug: missing support for :wrapper=>:bs3 here (should wrap input in div.checkbox/radio tags)
+          input.tag(:div, {class: 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
+        else
+          [tag, input.tag(:span, attr, input.opts[:error])]
+        end
+
+      when :textarea, :select
+        # puts ":textarea / :select"
+        [tag, input.tag(:span, attr, input.opts[:error])]
+      else
+        # TODO: Not sure what to do here, so doing nothing???
+        super
+      end
     end
   end
 end

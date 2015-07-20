@@ -1174,13 +1174,43 @@ describe "BS3" do
     # f.input(:text, data: {pattern: "^([_A-z0-9]){3,}$" }, class: 'custom', maxlength: "20", placeholder: 'foobar', id: 'foo', required: true, label: "Foo Bar" ).to_s.must_equal '<div class="form-group"><label for="foo">Foo Bar</label><input class="form-control custom" data-pattern="^([_A-z0-9]){3,}$" id="foo" maxlength="20" placeholder="foobar" required="required" type="text"/></div>'
   end
 
-  it "error_handler: bs3" do
-    Forme::Form.new(:error_handler=>:bs3).input(:textarea, error: 'bar', id: 'foo').to_s.must_equal '<textarea id="foo"></textarea><span class="help-block with-error">bar</span>'
-    Forme::Form.new(:error_handler=>:bs3).input(:textarea, error: 'bar', id: 'foo', class: 'custom').to_s.must_equal '<textarea class="custom" id="foo"></textarea><span class="help-block with-error">bar</span>'
 
-    f = Forme::Form.new(:config=>:bs3)
-    f.input(:textarea, id: 'foo', class: 'custom', error: 'bar', value: 'foobar').to_s.must_equal '<div class="form-group"><textarea class="form-control custom" id="foo">foobar</textarea><span class="help-block with-error">bar</span></div>'
-    f.input(:textarea, id: 'foo', class: 'custom', error: nil, value: 'foobar').to_s.must_equal '<div class="form-group"><textarea class="form-control custom" id="foo">foobar</textarea></div>'
+  it "error_handler: bs3" do
+
+    %w(text password file color date email month number range search tel time url week).each do |t|
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar').to_s.must_equal "<input type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: nil).to_s.must_equal "<input type=\"#{t}\"/>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', id: 'foobar').to_s.must_equal "<input id=\"foobar\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', class: 'foo').to_s.must_equal "<input class=\"foo\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', class: 'form-control').to_s.must_equal "<input class=\"form-control\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span>"
+    end
+
+    %w(checkbox radio).each do |t|
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar').to_s.must_equal "<div class=\"has-error\"><input type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span></div>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', id: 'foobar').to_s.must_equal "<div class=\"has-error\"><input id=\"foobar\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span></div>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', class: 'foo').to_s.must_equal "<div class=\"has-error\"><input class=\"foo\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span></div>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', class: 'form-control').to_s.must_equal "<div class=\"has-error\"><input class=\"form-control\" type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span></div>"
+      
+      # TODO: Fix checbox/radio tags error output. Add wrapping <div.checkbox/radio> within <div.has-error> tag
+      # f = Forme::Form.new(:config=>:bs3)
+      # f.input(t.to_sym, error: 'bar').to_s.must_equal "<div class=\"has-error\"><div class=\"#{t}\"<input type=\"#{t}\"/><span class=\"help-block with-errors\">bar</span></div></div>"
+    end
+
+    %w(submit reset button).each do |t|
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar').to_s.must_equal "<input type=\"#{t}\"/>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', id: 'foobar', class: 'foo').to_s.must_equal "<input class=\"foo\" id=\"foobar\" type=\"#{t}\"/>"
+    end
+
+    %w(textarea select).each do |t|
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar').to_s.must_equal "<#{t}></#{t}><span class=\"help-block with-errors\">bar</span>"
+      Forme::Form.new(:error_handler=>:bs3).input(t.to_sym, error: 'bar', class: 'foo', id: 'foobar').to_s.must_equal "<#{t} class=\"foo\" id=\"foobar\"></#{t}><span class=\"help-block with-errors\">bar</span>"
+    end
+    
+    # TODO: Add input[type: hidden] 
+    
+    # TODO: Fix missing :wrapper output div.form-group
+    # f = Forme::Form.new(:config=>:bs3)
+    # f.input(:textarea, id: 'foo', class: 'custom', error: 'bar', value: 'foobar').to_s.must_equal '<div class="form-group"><textarea class="form-control custom" id="foo">foobar</textarea><span class="help-block with-error">bar</span></div>'
   end
 
   it "config: bs3 outputs Bootstrap examples code" do
