@@ -1088,15 +1088,48 @@ end
 
 describe "BS3" do
   
-  it "wrapper: bs3 wraps tags in a div.form-group" do
-    Forme::Form.new(:wrapper=>:bs3).input(:textarea).to_s.must_equal '<div class="form-group"><textarea></textarea></div>'
-    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar').to_s.must_equal '<div class="form-group"><textarea id="bar"></textarea></div>'
-    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: 'custom').to_s.must_equal '<div class="form-group"><textarea class="custom" id="bar"></textarea></div>'
-    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: 'form-group').to_s.must_equal '<div class="form-group"><textarea class="form-group" id="bar"></textarea></div>'
-    Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'bar', class: :'form-group').to_s.must_equal '<div class="form-group"><textarea class="form-group" id="bar"></textarea></div>'
+  it "wrapper: bs3 wraps input in a div.form-group or div.checkbox/.radio or nothing" do
+    
+    %w(text password color date email month number range search tel time url week).each do |t|
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym).to_s.must_equal "<div class=\"form-group\"><input type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, id: 'foobar', class: 'foo').to_s.must_equal "<div class=\"form-group\"><input class=\"foo\" id=\"foobar\" type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, wrapper_attr: { id: 'baz'}).to_s.must_equal "<div class=\"form-group\" id=\"baz\"><input type=\"#{t}\"/></div>"
+    end
+    
+    %w(checkbox radio).each do |t|
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym).to_s.must_equal "<div class=\"#{t}\"><input type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, id: 'foobar', class: 'foo').to_s.must_equal "<div class=\"#{t}\"><input class=\"foo\" id=\"foobar\" type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, wrapper_attr: { id: 'baz'}).to_s.must_equal "<div class=\"#{t}\" id=\"baz\"><input type=\"#{t}\"/></div>"
+    end
+    
+    %w(file submit reset).each do |t|
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym).to_s.must_equal "<div class=\"form-group\"><input type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, id: 'foobar', class: 'foo').to_s.must_equal "<div class=\"form-group\"><input class=\"foo\" id=\"foobar\" type=\"#{t}\"/></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, wrapper_attr: { id: 'baz'} ).to_s.must_equal "<div class=\"form-group\" id=\"baz\"><input type=\"#{t}\"/></div>"
+    end
+
+    %w(select textarea).each do |t|
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym).to_s.must_equal "<div class=\"form-group\"><#{t}></#{t}></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, id: 'foobar', class: 'foo').to_s.must_equal "<div class=\"form-group\"><#{t} class=\"foo\" id=\"foobar\"></#{t}></div>"
+      Forme::Form.new(:wrapper=>:bs3).input(t.to_sym, class: 'form-control', wrapper_attr: { id: 'baz' }).to_s.must_equal "<div class=\"form-group\" id=\"baz\"><#{t} class=\"form-control\"></#{t}></div>"
+    end
+    
+    
+    Forme::Form.new(:wrapper=>:bs3).input(:hidden).to_s.must_equal '<input type="hidden"/>'
+    Forme::Form.new(:wrapper=>:bs3).input(:hidden, id: 'foobar').to_s.must_equal '<input id="foobar" type="hidden"/>'
+    # TODO: class is redundant on hidden tags and should be nulled and not output
+    Forme::Form.new(:wrapper=>:bs3).input(:hidden, class: 'foo').to_s.must_equal '<input class="foo" type="hidden"/>'
+    Forme::Form.new(:wrapper=>:bs3).input(:hidden, value: 'foo').to_s.must_equal '<input type="hidden" value="foo"/>'
+    
     Forme::Form.new(:wrapper=>:bs3).input(:textarea, wrapper_attr: { id: 'bar', class: 'form-group'}, id: 'foobar').to_s.must_equal '<div class="form-group" id="bar"><textarea id="foobar"></textarea></div>'
     Forme::Form.new(:wrapper=>:bs3).input(:textarea, wrapper_attr: { id: 'bar', class: :'form-group'}, id: 'foobar').to_s.must_equal '<div class="form-group" id="bar"><textarea id="foobar"></textarea></div>'
     Forme::Form.new(:wrapper=>:bs3).input(:textarea, id: 'foobaz', wrapper_attr: { id: 'baz', class: 'form-group'}).to_s.must_equal '<div class="form-group" id="baz"><textarea id="foobaz"></textarea></div>'
+
+    # TODO: datetime gets a datetime-local type. Bug or feature??
+    Forme::Form.new(:wrapper=>:bs3).input(:datetime).to_s.must_equal '<div class="form-group"><input type="datetime-local"/></div>'
+    Forme::Form.new(:wrapper=>:bs3).input(:'datetime-local').to_s.must_equal '<div class="form-group"><input type="datetime-local"/></div>'
+
+    Forme::Form.new(:wrapper=>:bs3).tag(:input, type: :text).to_s.must_equal '<input type="text"/>'
   end
 
   it "serializer: bs3 adds '.form-control' to input, textarea & select tags" do
