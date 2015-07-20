@@ -60,7 +60,7 @@ module Forme
   end
 
   register_config(:formtastic, :wrapper=>:li, :inputs_wrapper=>:fieldset_ol, :labeler=>:explicit)
-  register_config(:bs3, :wrapper=>:bs3, :inputs_wrapper=>:default, :serializer=>:bs3, :labeler=>:explicit, :error_handler=>:bs3)
+  register_config(:bs3, :inputs_wrapper=>:bs3, :wrapper=>:bs3, :error_handler=>:bs3, :serializer=>:bs3, :labeler=>:bs3)
 
   # Call <tt>Forme::Form.form</tt> with the given arguments and block.
   def self.form(*a, &block)
