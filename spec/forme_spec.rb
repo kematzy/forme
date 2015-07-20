@@ -1132,25 +1132,46 @@ describe "BS3" do
     Forme::Form.new(:wrapper=>:bs3).tag(:input, type: :text).to_s.must_equal '<input type="text"/>'
   end
 
-  it "serializer: bs3 adds '.form-control' to input, textarea & select tags" do
-    Forme::Form.new(:serializer=>:bs3).input(:textarea).to_s.must_equal '<textarea class="form-control"></textarea>'
-    Forme::Form.new(:serializer=>:bs3).input(:textarea, class: 'custom').to_s.must_equal '<textarea class="form-control custom"></textarea>'
-    Forme::Form.new(:serializer=>:bs3).input(:textarea, class: 'form-control', id: 'bar').to_s.must_equal '<textarea class="form-control" id="bar"></textarea>'
 
-    Forme::Form.new(:serializer=>:bs3).input(:password).to_s.must_equal '<input class="form-control" type="password"/>'
-    Forme::Form.new(:serializer=>:bs3).input(:password, class: 'custom').to_s.must_equal '<input class="form-control custom" type="password"/>'
-    Forme::Form.new(:serializer=>:bs3).input(:password, class: 'form-control', id: 'bar').to_s.must_equal '<input class="form-control" id="bar" type="password"/>'
+  it "serializer: bs3 adds '.form-control' to input, textarea & select tags" do 
 
-    Forme::Form.new(:serializer=>:bs3).input(:select).to_s.must_equal '<select class="form-control"></select>'
-    Forme::Form.new(:serializer=>:bs3).input(:select, class: 'custom').to_s.must_equal '<select class="form-control custom"></select>'
-    Forme::Form.new(:serializer=>:bs3).input(:select, class: 'form-control', id: 'bar').to_s.must_equal '<select class="form-control" id="bar"></select>'
+    %w(text password color date email month number range search tel time url week).each do |t|
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym).to_s.must_equal "<input class=\"form-control\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, id: 'foobar').to_s.must_equal "<input class=\"form-control\" id=\"foobar\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'foo').to_s.must_equal "<input class=\"form-control foo\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'form-control').to_s.must_equal "<input class=\"form-control\" type=\"#{t}\"/>"
+    end
 
-    Forme::Form.new(:serializer=>:bs3).input(:checkbox).to_s.must_equal '<input type="checkbox"/>'
-    Forme::Form.new(:serializer=>:bs3).input(:radio).to_s.must_equal '<input type="radio"/>'
-    Forme::Form.new(:serializer=>:bs3).input(:file).to_s.must_equal '<input type="file"/>'
+    %w(checkbox radio).each do |t|
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym).to_s.must_equal "<input type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, id: 'foobar').to_s.must_equal "<input id=\"foobar\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'foo').to_s.must_equal "<input class=\"foo\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'form-control').to_s.must_equal "<input type=\"#{t}\"/>"
+    end
 
-    f = Forme::Form.new(:config=>:bs3)
-    f.input(:text, data: {pattern: "^([_A-z0-9]){3,}$" }, class: 'custom', maxlength: "20", placeholder: 'foobar', id: 'foo', required: true ).to_s.must_equal '<div class="form-group"><input class="form-control custom" data-pattern="^([_A-z0-9]){3,}$" id="foo" maxlength="20" placeholder="foobar" required="required" type="text"/></div>'
+    %w(file submit reset).each do |t|
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym).to_s.must_equal "<input type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, id: 'foobar').to_s.must_equal "<input id=\"foobar\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'foo').to_s.must_equal "<input class=\"foo\" type=\"#{t}\"/>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'form-control').to_s.must_equal "<input class=\"form-control\" type=\"#{t}\"/>"
+    end
+
+    %w(select textarea).each do |t|
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym).to_s.must_equal "<#{t} class=\"form-control\"></#{t}>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, id: 'foobar').to_s.must_equal "<#{t} class=\"form-control\" id=\"foobar\"></#{t}>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'foo').to_s.must_equal "<#{t} class=\"form-control foo\"></#{t}>"
+      Forme::Form.new(:serializer=>:bs3).input(t.to_sym, class: 'form-control').to_s.must_equal "<#{t} class=\"form-control\"></#{t}>"
+    end
+
+    Forme::Form.new(:serializer=>:bs3).input(:hidden).to_s.must_equal '<input type="hidden"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:hidden, id: 'foobar').to_s.must_equal '<input id="foobar" type="hidden"/>'
+    # TODO: class is redundant on hidden tags and should be nulled and not output
+    Forme::Form.new(:serializer=>:bs3).input(:hidden, class: 'foo').to_s.must_equal '<input class="foo" type="hidden"/>'
+    Forme::Form.new(:serializer=>:bs3).input(:hidden, value: 'foo').to_s.must_equal '<input type="hidden" value="foo"/>'
+    
+    # TODO: Bug fix missing wrapper output when adding label
+    # f = Forme::Form.new(:config=>:bs3)
+    # f.input(:text, data: {pattern: "^([_A-z0-9]){3,}$" }, class: 'custom', maxlength: "20", placeholder: 'foobar', id: 'foo', required: true, label: "Foo Bar" ).to_s.must_equal '<div class="form-group"><label for="foo">Foo Bar</label><input class="form-control custom" data-pattern="^([_A-z0-9]){3,}$" id="foo" maxlength="20" placeholder="foobar" required="required" type="text"/></div>'
   end
 
   it "error_handler: bs3" do
