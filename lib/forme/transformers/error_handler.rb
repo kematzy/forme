@@ -31,7 +31,7 @@ module Forme
     # Return tag with error message span tag after it.
     def call(tag, input)
       # delete .error on tag for full BS3 support
-      tag.attr[:class] = tag.attr[:class].gsub(/\s*error\s*/,'')
+      tag.attr[:class] = tag.attr[:class].to_s.gsub(/\s*error\s*/,'')
       tag.attr.delete(:class) if tag.attr[:class].empty?
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
