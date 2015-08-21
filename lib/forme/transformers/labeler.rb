@@ -112,27 +112,26 @@ module Forme
       # else
       #   puts "ELSE "
       # end
-      
       case tag.type.to_sym
       when :input
         case tag.attr[:type].to_sym
         when :checkbox, :radio
           # puts "tag: input & type checkbox/radio [#{tag.attr[:type]}]"
-          input.tag(:label, label_attr, [tag, [input.opts[:label]]])
+          input.tag(:label, label_attr, [tag, ' ', [input.opts[:label]]])
         when :submit, :reset,:button
           puts "tag: input & type submit/reset/button [#{tag.attr[:type]}]"
           [tag]
         else
-          puts "ELSE "
+          # puts "ELSE "
           label = input.tag(:label, label_attr, [input.opts[:label]])
           # if lpos
           
-          [label, tag]
+          [label, ' ', tag]
         end
         
       when :textarea, :select
         label = input.tag(:label, label_attr, [input.opts[:label]])
-        [label, tag]
+        [label, ' ', tag]
       end
       
  #
