@@ -58,18 +58,24 @@ module Forme
     end
   end
 
-  # Use a <div class="form-group"> tag to wrap the inputs.
+  # Use a <fieldset> tag to wrap the inputs.
   #
   # Registered as :bs3.
   class InputsWrapper::Bootstrap3
     Forme.register_transformer(:inputs_wrapper, :bs3, new)
 
-    # Wrap the inputs in a <div class="form-group"> tag
     def call(form, opts, &block)
-      attr = opts[:attr] ? opts[:attr].dup : { }
-      klass = attr[:class] ? "form-group #{attr[:class].to_s}" : ''
-      attr[:class] = "form-group #{klass.gsub(/\s*form-group\s*/,'')}".strip
-      form.tag(:div, attr, &block)
+      attr = opts[:attr] ? opts[:attr].dup : {}
+      Forme.attr_classes(attr, 'inputs')
+      if legend = opts[:legend]
+        form.tag(:fieldset, attr) do
+          form.emit(form.tag(:legend, opts[:legend_attr], legend))
+          yield
+        end
+      else
+        # attr[:class] = attr[:class].gsub(/\s*form-group\s*/,'').strip
+        form.tag(:fieldset, attr, &Proc.new)
+      end
     end
   end
 

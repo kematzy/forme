@@ -537,54 +537,34 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should have an #inputs method for multiple inputs wrapped in a fieldset" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead repeats <div class="form-group"></div>
-    
     @f.inputs([:textarea, :text]).to_s.must_equal '<fieldset class="inputs"><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have default #inputs method accept an :attr option" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead repeats <div class="form-group"></div>
-    
-    @f.inputs([:textarea, :text], :legend=>'Inputs', :attr=>{:class=>'foo', :bar=>'baz'}).to_s.must_equal '<fieldset bar="baz" class="foo inputs"><legend>Inputs</legend><textarea class="form-control"></textarea><input class="form-control" type="text"/></fieldset>'
+    @f.inputs([:textarea, :text], :legend=>'Inputs', :attr=>{:class=>'foo', :bar=>'baz'}).to_s.must_equal '<fieldset bar="baz" class="foo inputs"><legend>Inputs</legend><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have default #inputs method accept a :legend option" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and legend and instead adds <div class="form-group"></div>
-    @f.inputs([:textarea, :text], :legend=>'Inputs').to_s.must_equal '<fieldset class="inputs"><legend>Inputs</legend><textarea class="form-control"></textarea><input class="form-control" type="text"/></fieldset>'
+    @f.inputs([:textarea, :text], :legend=>'Inputs').to_s.must_equal '<fieldset class="inputs"><legend>Inputs</legend><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have default #inputs method accept a :legend_attr option" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead repeats <div class="form-group"></div>
-    
-    @f.inputs([:textarea, :text], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.must_equal '<fieldset class="inputs"><legend class="foo">Inputs</legend><div class="form-group"><textarea class="form-control"></textarea></fieldset><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
+    @f.inputs([:textarea, :text], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.must_equal '<fieldset class="inputs"><legend class="foo">Inputs</legend><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have an #inputs method take a block and yield to it" do
-    skip("pending code change")
-    # TODO: <fieldset> tag is missing
     @f.inputs{@f.input(:textarea); @f.input(:text)}.to_s.must_equal '<fieldset class="inputs"><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have an #inputs method work with both args and block" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead repeats <div class="form-group"></div>
     @f.inputs([:textarea]){@f.input(:text)}.to_s.must_equal '<fieldset class="inputs"><div class="form-group"><textarea class="form-control"></textarea></div><div class="form-group"><input class="form-control" type="text"/></div></fieldset>'
   end
 
   it "should have an #inputs method support array arguments and creating inputs with the array as argument list" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead repeats <div class="form-group"></div>
     @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).to_s.must_equal '<fieldset class="inputs"><div class="form-group"><textarea class="form-control" name="foo"></textarea></div><div class="form-group"><input class="form-control" id="bar" type="text"/></div></fieldset>'
   end
 
   it "should have #inputs accept transformer options to modify the options inside the inputs" do
-    skip('pending code change')
-    # TODO: OUTPUT ERROR: does not output fieldset and instead adds <div class="form-group"><div>... tags
-    
     @f.inputs([:textarea, :text], :wrapper=>:div).to_s.must_equal '<fieldset class="inputs"><div><textarea class="form-control"></textarea></div><div><input class="form-control" type="text"/></div></fieldset>'
   end
 
