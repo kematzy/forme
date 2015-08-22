@@ -73,7 +73,6 @@ module Forme
           yield
         end
       else
-        # attr[:class] = attr[:class].gsub(/\s*form-group\s*/,'').strip
         form.tag(:fieldset, attr, &Proc.new)
       end
     end
