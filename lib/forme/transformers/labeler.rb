@@ -117,6 +117,7 @@ module Forme
       when :submit
         [tag]
       else
+        # TODO: FUNCTIONALITY IMPROVEMENT: the ': ' at end of label should really be a config option.
         label = input.tag(:label, label_attr, [input.opts[:label] + ": "])
         
         if lpos == :after
