@@ -457,11 +457,11 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should automatically create a label if a :label option is used" do
-    @f.input(:text, :label=>'Foo', :value=>'foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control" type="text" value="foo"/></div>'
+    @f.input(:text, :label=>'Foo', :value=>'foo').to_s.must_equal '<div class="form-group"><label>Foo: </label> <input class="form-control" type="text" value="foo"/></div>'
   end
 
   it "should set label attributes with :label_attr option" do
-    @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.must_equal '<div class="form-group"><label class="bar">Foo</label> <input class="form-control" type="text" value="foo"/></div>'
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.must_equal '<div class="form-group"><label class="bar">Foo: </label> <input class="form-control" type="text" value="foo"/></div>'
   end
 
   it "should handle implicit labels with checkboxes" do
@@ -469,7 +469,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should handle implicit labels with :label_position=>:after" do
-    @f.input(:text, :label=>'Foo', :value=>'foo', :label_position=>:after).to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/> <label>Foo</label></div>'
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_position=>:after).to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/> <label>Foo: </label></div>'
   end
 
   it "should handle implicit labels with checkboxes with :label_position=>:before" do
@@ -481,7 +481,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should add an error message after the label" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control error" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<div class="form-group"><label>Foo: </label> <input class="form-control error" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should add to existing :class option if :error option is used" do
@@ -676,8 +676,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs handle implicit labels or checkboxes without hidden fields with :label_position=>:before" do
-    skip('pending code fix')
-    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before, :no_hidden=>true).to_s.must_equal '<label>Foo <input id="bar" name="a" type="checkbox" value="foo"/></label>'
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before, :no_hidden=>true).to_s.must_equal '<div class="checkbox"><label for="bar">Foo <input id="bar" name="a" type="checkbox" value="foo"/></label></div>'
   end
 
   it "inputs should accept a :error_handler option to use a custom error_handler" do

@@ -106,17 +106,8 @@ module Forme
       label = input.opts[:label]
       lpos = input.opts[:label_position] || ([:radio, :checkbox].include?(input.type) ? :after : :before)
       
-      # puts "tag: [#{tag.attr[:type]}]"
-      # # handle checboxes,
-      # if ['checkbox','radio'].include?(tag.attr[:type].to_s)
-      #   puts "tag: input & type checkbox/radio [#{tag.attr[:type]}]"
-      # else
-      #   puts "ELSE "
-      # end
-
       case input.type
       when :checkbox, :radio
-        # puts "tag: input & type checkbox/radio [#{tag.attr[:type]}]"
         label = if lpos == :before
           [label, ' ', tag]
         else
@@ -126,7 +117,7 @@ module Forme
       when :submit
         [tag]
       else
-        label = input.tag(:label, label_attr, [input.opts[:label]])
+        label = input.tag(:label, label_attr, [input.opts[:label] + ": "])
         
         if lpos == :after
           [tag, ' ', label]
@@ -134,28 +125,6 @@ module Forme
           [label, ' ', tag]
         end
       end
-      
- #
- #      # unless label_attr[:for] === false
- #      #   label_attr[:for] ||= input.opts.fetch(:label_for, id)
- #      # else
- #      #   label_attr[:for] = nil
- #      # end
- #      label_attr[:for] = label_attr[:for] === false ? nil : input.opts.fetch(:label_for, id)
- #      lpos = input.opts[:label_position] || ([:radio, :checkbox].include?(input.type) ? :after : :before)
- #
- #      # Forme.attr_classes(label_attr, "label-#{lpos}")
- #      label = input.tag(:label, label_attr, [input.opts[:label]]) # do |l|
- # #        l.tag
- # #      end
- # #      label
- #
- #      t = if lpos == :before
- #        [label, tag]
- #      else
- #        [tag, label]
- #      end
- #      t
     end
   end
 end
