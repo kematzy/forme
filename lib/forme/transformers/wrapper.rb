@@ -59,45 +59,19 @@ module Forme
       #   [tag,input]
       # end
       
-
-      case tag
-      when Tag
-        case tag.type.to_sym
-        when :input
-          case tag.attr[:type].to_sym
-          when :radio, :checkbox
-            t = tag.attr[:type].to_s
-            klass = attr[:class] ? "#{t} #{attr[:class].to_s}" : ''
-            attr[:class] = "#{t} #{klass.gsub(/\s*#{t}\s*/,'')}".strip
-            [input.tag(:div, attr, tag)]
-
-          when :hidden
-            # super
-            [tag]
-
-          else # when :submit, :reset
-            klass = attr[:class] ? "form-group #{attr[:class].to_s}" : ''
-            attr[:class] = "form-group #{klass.gsub(/\s*form-group\s*/,'')}".strip
-            # [tag, input.tag(:div, attr, super)]
-            [input.tag(:div, attr, super)]
-          end
-        when :textarea, :select
-          # super
-          klass = attr[:class] ? "form-group #{attr[:class].to_s}" : ''
-          attr[:class] = "form-group #{klass.gsub(/\s*form-group\s*/,'')}".strip
-          input.tag(:div, attr, tag)
-        else
-          # super
-          [tag, input]
-        end
+      case input.type
+      when :radio, :checkbox
+        t = input.type.to_s
+        klass = attr[:class] ? "#{t} #{attr[:class].to_s}" : ''
+        attr[:class] = "#{t} #{klass.gsub(/\s*#{t}\s*/,'')}".strip
+        [input.tag(:div, attr, tag)]
+      when :hidden
+        super
       else
-        [tag]
+        klass = attr[:class] ? "form-group #{attr[:class].to_s}" : ''
+        attr[:class] = "form-group #{klass.gsub(/\s*form-group\s*/,'')}".strip
+        [input.tag(:div, attr, tag)]
       end
-      
-      
-      
-      
-      
       
       # case tag
       # when Tag

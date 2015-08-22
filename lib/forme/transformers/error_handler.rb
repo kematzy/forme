@@ -31,30 +31,22 @@ module Forme
     # Return tag with error message span tag after it.
     def call(tag, input)
       # delete .error on tag for full BS3 support
-      tag.attr[:class] = tag.attr[:class].to_s.gsub(/\s*error\s*/,'')
-      tag.attr.delete(:class) if tag.attr[:class].empty?
+      if tag.is_a?(Tag)
+        tag.attr[:class] = tag.attr[:class].to_s.gsub(/\s*error\s*/,'')
+        tag.attr.delete(:class) if tag.attr[:class].empty?
+      end
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
       Forme.attr_classes(attr, 'help-block with-errors')
 
-      case tag.type.to_sym
-      when :input
-        case tag.attr[:type].to_sym
-        when :submit, :reset, :button
-          [tag]
-        when :checkbox, :radio
-          # TODO: Bug: missing support for :wrapper=>:bs3 here (should wrap input in div.checkbox/radio tags)
-          input.tag(:div, {class: 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
-        else
-          [tag, input.tag(:span, attr, input.opts[:error])]
-        end
-
-      when :textarea, :select
-        # puts ":textarea / :select"
-        [tag, input.tag(:span, attr, input.opts[:error])]
+      case input.type
+      when :submit
+        [tag]
+      when :checkbox, :radio
+        # TODO: Bug: missing support for :wrapper=>:bs3 here (should wrap input in div.checkbox/radio tags)
+        input.tag(:div, {class: 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
       else
-        # TODO: Not sure what to do here, so doing nothing???
-        super
+        [tag, input.tag(:span, attr, input.opts[:error])]
       end
     end
   end

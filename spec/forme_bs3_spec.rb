@@ -197,7 +197,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should create hidden input with value 0 for each checkbox with a name" do
-    @f.input(:checkbox, :name=>"foo").to_s.must_equal '<input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/>'
+    @f.input(:checkbox, :name=>"foo").to_s.must_equal '<div class="checkbox"><input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/></div>'
   end
 
   it "should not create hidden input with value 0 for each checkbox with a name if :no_hidden option is used" do
@@ -205,18 +205,14 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should create hidden input with _hidden appended to id for each checkbox with a name and id" do
-    @f.input(:checkbox, :name=>"foo", :id=>"bar").to_s.must_equal '<input id="bar_hidden" name="foo" type="hidden" value="0"/><input id="bar" name="foo" type="checkbox"/>'
+    @f.input(:checkbox, :name=>"foo", :id=>"bar").to_s.must_equal '<div class="checkbox"><input id="bar_hidden" name="foo" type="hidden" value="0"/><input id="bar" name="foo" type="checkbox"/></div>'
   end
   
   it "should create hidden input with value f for each checkbox with a name and value t" do
-    skip("pending code fix") 
-    # TODO: nest input[hidden] within div.checkbox
     @f.input(:checkbox, :name=>"foo", :value=>"t").to_s.must_equal '<div class="checkbox"><input name="foo" type="hidden" value="f"/><input name="foo" type="checkbox" value="t"/></div>'
   end
 
   it "should use :hidden_value option for value of hidden input for checkbox" do
-    skip("pending code fix")
-    # TODO: nest input[hidden] within div.checkbox
     @f.input(:checkbox, :name=>"foo", :hidden_value=>"no").to_s.must_equal '<div class="checkbox"><input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/></div>'
   end
 
@@ -256,19 +252,19 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should use multiple select boxes for dates if the :as=>:select option is given" do
-    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.must_equal %{<select class="form-control" id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.must_equal %{<div class="form-group"><select class="form-control" id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></div>}
   end
 
   it "should allow ordering date select boxes via :order" do
-    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, '/', :day, '/', :year]).to_s.must_equal %{<select class="form-control" id="bar" name="foo[month]">#{sel(1..12, 6)}</select>/<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>/<select class="form-control" id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, '/', :day, '/', :year]).to_s.must_equal %{<div class="form-group"><select class="form-control" id="bar" name="foo[month]">#{sel(1..12, 6)}</select>/<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>/<select class="form-control" id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select></div>}
   end
 
   it "should allow only using specific date select boxes via :order" do
-    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, :year]).to_s.must_equal %{<select class="form-control" id="bar" name="foo[month]">#{sel(1..12, 6)}</select><select class="form-control" id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, :year]).to_s.must_equal %{<div class="form-group"><select class="form-control" id="bar" name="foo[month]">#{sel(1..12, 6)}</select><select class="form-control" id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select></div>}
   end
 
   it "should support :select_options for dates when :as=>:select is given" do
-    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_options=>{:year=>1970..2020}).to_s.must_equal %{<select class="form-control" id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_options=>{:year=>1970..2020}).to_s.must_equal %{<div class=\"form-group\"><select class="form-control" id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></div>}
   end
 
   it "should have explicit labeler and trtd wrapper work with multiple select boxes for dates" do
@@ -276,15 +272,15 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should use multiple select boxes for datetimes if the :as=>:select option is given" do
-    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal %{<select class="form-control" id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select class="form-control" id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select class="form-control" id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select>}
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal %{<div class=\"form-group\"><select class="form-control" id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select class="form-control" id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select class="form-control" id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select></div>}
   end
   
   it "should allow ordering select boxes for datetimes via :order" do
-    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2), :order=>[:day, '/', :month, 'T', :hour, ':', :minute]).to_s.must_equal %{<select class="form-control" id="bar" name="foo[day]">#{sel(1..31, 5)}</select>/<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>T<select class="form-control" id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>}
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2), :order=>[:day, '/', :month, 'T', :hour, ':', :minute]).to_s.must_equal %{<div class=\"form-group\"><select class="form-control" id="bar" name="foo[day]">#{sel(1..31, 5)}</select>/<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>T<select class="form-control" id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select></div>}
   end
 
   it "should support :select_options for datetimes when :as=>:select option is given" do
-    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 10, 3, 2), :select_options=>{:year=>1970..2020, :hour=>9..17}).to_s.must_equal %{<select class="form-control" id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select class="form-control" id="bar_hour" name="foo[hour]">#{sel(9..17, 10)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select class="form-control" id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select>}
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 10, 3, 2), :select_options=>{:year=>1970..2020, :hour=>9..17}).to_s.must_equal %{<div class="form-group"><select class="form-control" id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select class="form-control" id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select class="form-control" id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select class="form-control" id="bar_hour" name="foo[hour]">#{sel(9..17, 10)}</select>:<select class="form-control" id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select class="form-control" id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select></div>}
   end
 
   it "should create select tag with options" do
@@ -345,89 +341,88 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should create set of radio buttons" do
-    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
-    @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
   end
 
   it "should create set of radio buttons with options and values" do
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should create set of radio buttons with options and values with hashes" do
-    @f.input(:radioset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<label class="option"><input foo="1" type="radio" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="radio" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="radio" value="c"/> c</label>'
+    @f.input(:radioset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input foo="1" type="radio" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="radio" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="radio" value="c"/> c</label></div>'
   end
 
   it "should create set of radio buttons with options and values using given method" do
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<label class="option"><input type="radio" value="a"/> 1</label><label class="option"><input checked="checked" type="radio" value="b"/> 2</label><label class="option"><input type="radio" value="c"/> 3</label>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="a"/> 1</label><label class="option"><input checked="checked" type="radio" value="b"/> 2</label><label class="option"><input type="radio" value="c"/> 3</label></div>'
   end
 
   it "should support :add_blank option for radioset inputs" do
-    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<label class="option"><input type="radio" value=""/> </label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value=""/> </label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should use :add_blank option value as prompt if it is a String" do
-    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<label class="option"><input type="radio" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should respect the :key option for radio sets" do
-    @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<label class="option" for="foo_1"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label>'
+    @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label></div>'
   end
 
   it "should create set of radio buttons with fieldsets and legends for :optgroups" do
-    # TODO:verify that BS3 does nothing here.
-    @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="radio" value="3"/> c</label></fieldset>'
+    @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="form-group"><fieldset><legend>d</legend><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="radio" value="3"/> c</label></fieldset></div>'
   end
   
   it "should create set of checkbox buttons" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
-    @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should create set of checkbox buttons with options and values" do
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should create set of checkbox buttons with options and values with hashes" do
-    @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="checkbox" value="c"/> c</label>'
+    @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="checkbox" value="c"/> c</label></div>'
   end
   
   it "should create set of checkbox buttons with options and values using given method" do
     # TODO:verify that BS3 does nothing here.
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<label class="option"><input type="checkbox" value="a"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="b"/> 2</label><label class="option"><input type="checkbox" value="c"/> 3</label>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="a"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="b"/> 2</label><label class="option"><input type="checkbox" value="c"/> 3</label></div>'
   end
   
   it "should support :add_blank option for checkboxset inputs" do
-    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value=""/> </label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value=""/> </label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should use :add_blank option value as prompt if it is a String" do
-    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should respect the :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<label class="option" for="foo_1"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should prefer the :name option to :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :value=>2).to_s.must_equal '<label class="option" for="foo_1"><input id="foo_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="bar[]" type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
   end
   
   it "should prefer the :name and :id option to :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :id=>:baz, :value=>2).to_s.must_equal '<label class="option" for="baz_1"><input id="baz_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="baz_2"><input checked="checked" id="baz_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="baz_3"><input id="baz_3" name="bar[]" type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :id=>:baz, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="baz_1"><input id="baz_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="baz_2"><input checked="checked" id="baz_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="baz_3"><input id="baz_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should respect the :error option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="error_message">foo</span>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><div class="has-error"><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="help-block with-errors">foo</span></div></div>'
   end
 
   it "should create set of checkbox buttons with fieldsets and legends for optgroups" do
-    @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="checkbox" value="3"/> c</label></fieldset>'
+    @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="form-group"><fieldset><legend>d</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="checkbox" value="3"/> c</label></fieldset></div>'
   end
 
   it "should raise an Error for empty checkbox sets" do
-    @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.must_equal '<span class="error_message">foo</span>'
+    @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.must_equal '<div class="form-group"><span class="error_message">foo</span></div>'
   end
   
   it "radio and checkbox inputs should handle :checked option" do
@@ -462,49 +457,39 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should automatically create a label if a :label option is used" do
-    @f.input(:text, :label=>'Foo', :value=>'foo').to_s.must_equal '<label>Foo</label> <input class="form-control" type="text" value="foo"/>'
+    @f.input(:text, :label=>'Foo', :value=>'foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control" type="text" value="foo"/></div>'
   end
 
   it "should set label attributes with :label_attr option" do
-    @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.must_equal '<label class="bar">Foo</label> <input class="form-control" type="text" value="foo"/>'
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.must_equal '<div class="form-group"><label class="bar">Foo</label> <input class="form-control" type="text" value="foo"/></div>'
   end
 
   it "should handle implicit labels with checkboxes" do
-    skip("pending code fix")
-    # TODO: CODE ERROR: returns NoMethodError: undefined method `type' for #<Array:0x007f876c1b47e8>
-    #       .../forme/lib/forme/transformers/labeler.rb:115:in `call'
-    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a').to_s.must_equal '<input name="a" type="hidden" value="0"/><label><input name="a" type="checkbox" value="foo"/> Foo</label>'
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a').to_s.must_equal '<div class="checkbox"><label><input name="a" type="hidden" value="0"/><input name="a" type="checkbox" value="foo"/> Foo</label></div>'
   end
 
   it "should handle implicit labels with :label_position=>:after" do
-    # TODO: need to fix this, test passes, but code not actually correct in intention.
-    @f.input(:text, :label=>'Foo', :value=>'foo', :label_position=>:after).to_s.must_equal '<label>Foo</label> <input class="form-control" type="text" value="foo"/>'
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_position=>:after).to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/> <label>Foo</label></div>'
   end
 
   it "should handle implicit labels with checkboxes with :label_position=>:before" do
-    skip("pending code fix")
-    # TODO: CODE ERROR: returns NoMethodError: undefined method `type' for #<Array:0x007f876d13bbd0>
-    #       .../forme/lib/forme/transformers/labeler.rb:115:in `call'
-    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :label_position=>:before).to_s.must_equal '<input name="a" type="hidden" value="0"/><label>Foo <input name="a" type="checkbox" value="foo"/></label>'
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :label_position=>:before).to_s.must_equal '<div class="checkbox"><label>Foo <input name="a" type="hidden" value="0"/><input name="a" type="checkbox" value="foo"/></label></div>'
   end
 
   it "should automatically note the input has errors if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<input class="form-control" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should add an error message after the label" do
-    skip("pending code fix")
-    # TODO: CODE ERROR: returns NoMethodError: undefined method `attr' for #<Array:0x007fd4530d34a8>
-    #       ...forme/lib/forme/transformers/error_handler.rb:34:in `call'
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<label>Foo:</label><input class="error form-control" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control error" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should add to existing :class option if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<input class="form-control bar" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<div class="form-group"><input class="form-control bar" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should respect :error_attr option for setting the attributes for the error message span" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input class="form-control" type="text" value="foo"/><span class="foo help-block with-errors">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/><span class="foo help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "#open should return an opening tag" do
@@ -654,11 +639,11 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :help option to use custom helper text" do
-    @f.input(:text, :help=>"List type of foo").to_s.must_equal '<input class="form-control" type="text"/><span class="helper">List type of foo</span>'
+    @f.input(:text, :help=>"List type of foo").to_s.must_equal '<div class="form-group"><input class="form-control" type="text"/><span class="helper">List type of foo</span></div>'
   end
 
   it "inputs should accept a :helper_attr option for custom helper attributes" do
-    @f.input(:text, :help=>"List type of foo", :helper_attr=>{:class=>'foo'}).to_s.must_equal '<input class="form-control" type="text"/><span class="foo helper">List type of foo</span>'
+    @f.input(:text, :help=>"List type of foo", :helper_attr=>{:class=>'foo'}).to_s.must_equal '<div class="form-group"><input class="form-control" type="text"/><span class="foo helper">List type of foo</span></div>'
   end
 
   it "inputs should have helper displayed inside wrapper, after error" do
@@ -675,19 +660,19 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :labeler option to use a custom labeler" do
-    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.must_equal '<label class="label-before" for="foo">bar</label><textarea class="form-control" id="foo"></textarea>'
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><label class="label-before" for="foo">bar</label><textarea class="form-control" id="foo"></textarea></div>'
   end
 
   it "inputs handle explicit labels with :label_position=>:after" do
-    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.must_equal '<textarea class="form-control" id="foo"></textarea><label class="label-after" for="foo">bar</label>'
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.must_equal '<div class="form-group"><textarea class="form-control" id="foo"></textarea><label class="label-after" for="foo">bar</label></div>'
   end
 
   it "should handle explicit labels with checkboxes" do
-    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.must_equal '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label class="label-after" for="bar">Foo</label>'
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.must_equal '<div class="checkbox"><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label class="label-after" for="bar">Foo</label></div>'
   end
 
   it "should handle explicit labels with checkboxes with :label_position=>:before" do
-    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.must_equal '<label class="label-before" for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/>'
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.must_equal '<div class="checkbox"><label class="label-before" for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/></div>'
   end
 
   it "inputs handle implicit labels or checkboxes without hidden fields with :label_position=>:before" do
@@ -696,7 +681,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :error_handler option to use a custom error_handler" do
-    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<textarea class="form-control error" id="foo"></textarea>!!! bar'
+    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><textarea class="form-control error" id="foo"></textarea>!!! bar</div>'
   end
 
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do

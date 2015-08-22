@@ -103,7 +103,8 @@ module Forme
       label_attr = label_attr ? label_attr.dup : {}
       
       label_attr[:for] = label_attr[:for] === false ? nil : input.opts.fetch(:label_for, id)
-      lpos = input.opts[:label_position] ? input.opts[:label_position] : nil
+      label = input.opts[:label]
+      lpos = input.opts[:label_position] || ([:radio, :checkbox].include?(input.type) ? :after : :before)
       
       # puts "tag: [#{tag.attr[:type]}]"
       # # handle checboxes,
@@ -112,26 +113,26 @@ module Forme
       # else
       #   puts "ELSE "
       # end
-      case tag.type.to_sym
-      when :input
-        case tag.attr[:type].to_sym
-        when :checkbox, :radio
-          # puts "tag: input & type checkbox/radio [#{tag.attr[:type]}]"
-          input.tag(:label, label_attr, [tag, ' ', [input.opts[:label]]])
-        when :submit, :reset,:button
-          puts "tag: input & type submit/reset/button [#{tag.attr[:type]}]"
-          [tag]
+
+      case input.type
+      when :checkbox, :radio
+        # puts "tag: input & type checkbox/radio [#{tag.attr[:type]}]"
+        label = if lpos == :before
+          [label, ' ', tag]
         else
-          # puts "ELSE "
-          label = input.tag(:label, label_attr, [input.opts[:label]])
-          # if lpos
-          
+          [tag, ' ', label]
+        end
+        input.tag(:label, label_attr, label)
+      when :submit
+        [tag]
+      else
+        label = input.tag(:label, label_attr, [input.opts[:label]])
+        
+        if lpos == :after
+          [tag, ' ', label]
+        else
           [label, ' ', tag]
         end
-        
-      when :textarea, :select
-        label = input.tag(:label, label_attr, [input.opts[:label]])
-        [label, ' ', tag]
       end
       
  #
