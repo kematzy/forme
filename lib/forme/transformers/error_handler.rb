@@ -44,7 +44,7 @@ module Forme
         [tag]
       when :checkbox, :radio
         # TODO: Bug: missing support for :wrapper=>:bs3 here (should wrap input in div.checkbox/radio tags)
-        input.tag(:div, {class: 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
+        input.tag(:div, {:class => 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
       else
         [tag, input.tag(:span, attr, input.opts[:error])]
       end
