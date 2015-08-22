@@ -177,34 +177,25 @@ module Forme
 
     def call(tag)
       # All textual <input>, <textarea>, and <select> elements with .form-control
-      
-      
       case tag
       when Tag
-        
-        case tag.type.to_sym
+        # puts "Tag activated...."
+        case tag.type
         when :input
+          # FIX: see spec/forme_bs3_spec.rb #"#tag should accept children as procs" for info
+          #      the above test returns errors otherwise
+          tag.attr[:type] = :text if tag.attr[:type].nil?  
+          
           case tag.attr[:type].to_sym
           when :checkbox, :radio, :hidden
             # .form-control class causes rendering problems, so remove if found
             tag.attr[:class].gsub!(/\s*form-control\s*/,'') if tag.attr[:class]
             tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
             
-            # klass = tag.attr[:class] ? "#{tag.attr[:class].to_s}" : nil
-            # puts "klass =[#{klass.inspect}]"
-            # klass = klass.gsub(/\s*form-controlz\s*/,'') unless klass.nil?
-            # puts "klass 2 =[#{klass.inspect}]"
-            # return "<#{tag.type}#{attr_html(tag.attr)}/>" #super
           when :file, :submit, :reset
-            # check if class .form-control is set, then keep it, else don't add
-            # tag.attr[:class].gsub!(/\s*form-control\s*/,'')
-            # if tag.attr[:class]
-            #
             # tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
             tag.attr[:class] = nil unless tag.attr[:class] && tag.attr[:class].strip != ''
-              
-            # tag.attr[:class] = "#{tag.attr[:class]}".strip || nil
-            
+          
           else
             klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
             tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
@@ -213,28 +204,112 @@ module Forme
           return "<#{tag.type}#{attr_html(tag.attr)}/>"
           
         when :textarea, :select
+          # puts "TYPE: textarea"
           klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
           tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
           return "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
-        # when :select
-        #   klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
-        #   tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
-        #   "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         else
-          # puts "super: else"
           super
         end
-      else
-        # puts "ELSE:  tag.class =[#{tag.class}]"
-        super
-      end
+        
+      # when Input
+      #   puts "INPUT: #{tag.inspect}"
+      # when Array
+      #   puts "ARRAY: #{tag.inspect}"
+    else
+      super
+    end
+      
+      # if tag.is_a?(Tag)
+      #   case tag.type.to_sym
+      #   when :input
+      #     # FIX: see spec/forme_bs3_spec.rb #"#tag should accept children as procs" for info
+      #     #      the above test returns errors otherwise
+      #     tag.attr[:type] = :text if tag.attr[:type].nil?
+      #
+      #     case tag.attr[:type].to_sym
+      #     when :checkbox, :radio, :hidden
+      #       # .form-control class causes rendering problems, so remove if found
+      #       tag.attr[:class].gsub!(/\s*form-control\s*/,'') if tag.attr[:class]
+      #       tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
+      #
+      #       # klass = tag.attr[:class] ? "#{tag.attr[:class].to_s}" : nil
+      #       # puts "klass =[#{klass.inspect}]"
+      #       # klass = klass.gsub(/\s*form-controlz\s*/,'') unless klass.nil?
+      #       # puts "klass 2 =[#{klass.inspect}]"
+      #       # return "<#{tag.type}#{attr_html(tag.attr)}/>" #super
+      #     when :file, :submit, :reset
+      #       # check if class .form-control is set, then keep it, else don't add
+      #       # tag.attr[:class].gsub!(/\s*form-control\s*/,'')
+      #       # if tag.attr[:class]
+      #       #
+      #       # tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
+      #       tag.attr[:class] = nil unless tag.attr[:class] && tag.attr[:class].strip != ''
+      #
+      #       # tag.attr[:class] = "#{tag.attr[:class]}".strip || nil
+      #
+      #     else
+      #       klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+      #       tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+      #     end
+      #
+      #   return "<#{tag.type}#{attr_html(tag.attr)}/>"
+      #
+      #   when :textarea, :select
+      #     klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+      #     tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+      #     return "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
+      #   else
+      #     super
+      #   end
       # else
-      #   puts "super: end"
+      #   super
+      # end
+      
+      # case tag
+      # when Tag
+      #
+      #   case tag.type.to_sym
+      #   when :input
+      #       case tag.attr[:type].to_sym
+      #       when :checkbox, :radio, :hidden
+      #         # .form-control class causes rendering problems, so remove if found
+      #         tag.attr[:class].gsub!(/\s*form-control\s*/,'') if tag.attr[:class]
+      #         tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
+      #
+      #         # klass = tag.attr[:class] ? "#{tag.attr[:class].to_s}" : nil
+      #         # puts "klass =[#{klass.inspect}]"
+      #         # klass = klass.gsub(/\s*form-controlz\s*/,'') unless klass.nil?
+      #         # puts "klass 2 =[#{klass.inspect}]"
+      #         # return "<#{tag.type}#{attr_html(tag.attr)}/>" #super
+      #       when :file, :submit, :reset
+      #         # check if class .form-control is set, then keep it, else don't add
+      #         # tag.attr[:class].gsub!(/\s*form-control\s*/,'')
+      #         # if tag.attr[:class]
+      #         #
+      #         # tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
+      #         tag.attr[:class] = nil unless tag.attr[:class] && tag.attr[:class].strip != ''
+      #
+      #         # tag.attr[:class] = "#{tag.attr[:class]}".strip || nil
+      #
+      #       else
+      #         klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+      #         tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+      #       end
+      #
+      #     return "<#{tag.type}#{attr_html(tag.attr)}/>"
+      #
+      #   when :textarea, :select
+      #     klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
+      #     tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
+      #     return "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
+      #   else
+      #     super
+      #   end
+      # else
       #   super
       # end
     end
-
   end
-
 
 end
