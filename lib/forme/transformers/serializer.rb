@@ -190,9 +190,22 @@ module Forme
             tag.attr[:class].gsub!(/\s*form-control\s*/,'') if tag.attr[:class]
             tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
             
-          when :file, :submit, :reset
+          when :file
             tag.attr[:class] = nil unless tag.attr[:class] && tag.attr[:class].strip != ''
           
+          when :submit, :reset
+            klass = ['btn', 'btn-default']
+            if tag.attr[:class] && tag.attr[:class].strip != ''
+              tag.attr[:class].split(' ').each { |c| klass.push c }
+            end
+            tag.attr[:class] = klass.uniq
+            ['btn-primary','btn-success', 'btn-info', 'btn-warning','btn-danger',
+              'btn-outline','btn-link' 
+            ].each do |k|
+              tag.attr[:class].delete('btn-default') if tag.attr[:class].include?(k)
+            end
+            tag.attr[:class].join(' ')
+            
           else
             klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
             tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip

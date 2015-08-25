@@ -14,7 +14,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:radio).to_s.must_equal '<div class="radio"><input type="radio"/></div>'
     @f.input(:password).to_s.must_equal '<div class="form-group"><input class="form-control" type="password"/></div>'
     @f.input(:checkbox).to_s.must_equal '<div class="checkbox"><input type="checkbox"/></div>'
-    @f.input(:submit).to_s.must_equal '<div class="form-group"><input type="submit"/></div>'
+    @f.input(:submit).to_s.must_equal '<div class="form-group"><input class="btn btn-default" type="submit"/></div>'
   end
 
   it "should use :name option as attribute" do
@@ -501,15 +501,21 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "#button should return a submit tag" do
-    @f.button.to_s.must_equal '<div class="form-group"><input type="submit"/></div>'
+    @f.button.to_s.must_equal '<div class="form-group"><input class="btn btn-default" type="submit"/></div>'
   end
 
   it "#button should accept an options hash" do
-    @f.button(:name=>'foo', :value=>'bar').to_s.must_equal '<div class="form-group"><input name="foo" type="submit" value="bar"/></div>'
+    @f.button(:name=>'foo', :value=>'bar').to_s.must_equal '<div class="form-group"><input class="btn btn-default" name="foo" type="submit" value="bar"/></div>'
+  end
+  
+  it "#button should handle added classes" do
+    @f.button(:class=>'btn btn-primary').to_s.must_equal '<div class="form-group"><input class="btn btn-primary" type="submit"/></div>'
+    @f.button(:class=>'btn-danger').to_s.must_equal '<div class="form-group"><input class="btn btn-danger" type="submit"/></div>'
+    @f.button(:class=>'btn-success btn-lg').to_s.must_equal '<div class="form-group"><input class="btn btn-success btn-lg" type="submit"/></div>'
   end
 
   it "#button should accept a string to use as a value" do
-    @f.button('foo').to_s.must_equal '<div class="form-group"><input type="submit" value="foo"/></div>'
+    @f.button('foo').to_s.must_equal '<div class="form-group"><input class="btn btn-default" type="submit" value="foo"/></div>'
   end
 
   it "#tag should accept children as procs" do
