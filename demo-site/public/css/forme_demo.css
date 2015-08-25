@@ -26,6 +26,7 @@ form.forme li.boolean input[type="checkbox"] {
 }
 abbr[title="required"] {
   color: red;
+  border-bottom: none;
 }
 input, select, textarea { width: auto }
 fieldset {margin-left: 10px}

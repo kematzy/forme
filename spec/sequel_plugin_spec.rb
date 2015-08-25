@@ -70,16 +70,16 @@ describe "Forme Sequel::Model forms" do
   end
   
   it "should include required * in label if required" do
-    @b.input(:name, :required=>true).to_s.must_equal '<label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+    @b.input(:name, :required=>true).to_s.must_equal '<label>Name <abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
   it "should add required to label even if :label option specified" do
-    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<label>Foo<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<label>Foo <abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
   it "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
-    f.input(:name, :required=>true).to_s.must_equal '<li class="string required"><label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
+    f.input(:name, :required=>true).to_s.must_equal '<li class="string required"><label>Name <abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
   end
   
   it "should use a select box for tri-valued boolean fields" do
@@ -144,7 +144,7 @@ describe "Forme Sequel::Model forms" do
   end
 
   it "should not add a blank option by default if there is a default value and it is required" do
-    @b.input(:artist, :required=>true).to_s.must_equal '<label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+    @b.input(:artist, :required=>true).to_s.must_equal '<label>Artist <abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
   end
 
   it "should allow overriding default input type using a :type option" do
@@ -152,7 +152,7 @@ describe "Forme Sequel::Model forms" do
   end
 
   it "should use a required wrapper tag for many_to_one required associations" do
-    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.must_equal '<li class="many_to_one required"><label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
+    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.must_equal '<li class="many_to_one required"><label>Artist <abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
   end
 
   it "should use a set of radio buttons for many_to_one associations with :as=>:radio option" do
@@ -336,7 +336,7 @@ describe "Forme Sequel::Model forms" do
 
   it "should add required attribute if the column doesn't support nil values" do
     def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
-    @b.input(:name).to_s.must_equal '<label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+    @b.input(:name).to_s.must_equal '<label>Name <abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
   it "should use allow nested forms with many_to_one associations" do
