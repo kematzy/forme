@@ -7,8 +7,14 @@ h1.error {
   text-align: center;
 }
 
-label[for]:after {
-  content: ": "
+.set-label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
 }
 
 li label input[type="checkbox"], li label input[type="radio"] {

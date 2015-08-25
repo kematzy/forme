@@ -250,7 +250,7 @@ module Forme
           tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
         end
       end
-      tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
+      tags.unshift(form._tag(:span, {:class=>'set-label'}, @opts[:set_label])) if @opts[:set_label]
       wrapper.call(tags, form._input(type, opts)) if wrapper
       tags
     end
