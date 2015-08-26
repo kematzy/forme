@@ -508,4 +508,44 @@ module Forme
       tag(:span, {}, @attr[:value])
     end
   end
+  
+  # Formatter that adds "readonly" for most input types,
+  # and disables select/radio/checkbox inputs.
+  #
+  # Registered as :bs3_readonly.
+  class Formatter::Bs3ReadOnly < Formatter
+    Forme.register_transformer(:formatter, :bs3_readonly, self)
+
+    private
+
+    # Disabled checkbox inputs.
+    def format_checkbox
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text instead of an input field.
+    def _format_input(type)
+      @attr[:readonly] = :readonly
+      super
+    end
+
+    # Disabled radio button inputs.
+    def format_radio
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text of the selected values instead of a select box.
+    def format_select
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text instead of a text area.
+    def format_textarea
+      @attr[:readonly] = :readonly
+      super
+    end
+  end
 end
