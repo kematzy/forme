@@ -5,7 +5,7 @@ require 'roda'
 require 'models'
 
 class FormeDemo < Roda
-  plugin :static, %w'/css'
+  plugin :static, %w'/css /js'
 
   plugin :forme
   plugin :h

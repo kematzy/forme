@@ -1,6 +1,8 @@
 html {
   overflow-y: auto;
 }
+/* add padding for navbar-fixed-top */
+body { padding-top: 70px; }
 
 h1.error {
   color: red;
@@ -17,6 +19,10 @@ h1.error {
   color: #333;
 }
 
+/*label[for]:after {
+  content: ": "
+}
+*/
 li label input[type="checkbox"], li label input[type="radio"] {
   margin-left: 0.7em;
 }
