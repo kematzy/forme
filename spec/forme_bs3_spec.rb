@@ -652,6 +652,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
 
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
     @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.must_equal '<ol><div class="form-group"><textarea class="form-control"></textarea></div></ol>'
+    @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd).to_s.must_equal '<table class="table table-bordered"><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
   end
 
   it "inputs should accept a :wrapper=>nil option to not use a wrapper" do
