@@ -220,8 +220,10 @@ module Forme
       if @opts[:label]
         @opts[:set_label] = @opts.delete(:label)
       end
-      tag_wrapper = @opts.delete(:tag_wrapper) || :default
-      wrapper = Forme.transformer(:wrapper, @opts, @input.form_opts)
+
+      tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
+      wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
+      wrapper = Forme.transformer(:wrapper, wrapper)
 
       tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value ||= label
@@ -250,8 +252,9 @@ module Forme
           tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
         end
       end
+
       tags.unshift(form._tag(:span, {:class=>'set-label'}, @opts[:set_label])) if @opts[:set_label]
-      wrapper.call(tags, form._input(type, opts)) if wrapper
+
       tags
     end
 

@@ -110,15 +110,10 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use radio buttons for boolean fields if :as=>:radio is used" do
-    skip('pending code review / fix by Jeremy Evans')
-    # TODO: INCORRECT OUTPUT: The test output is the correct expected BS3 output, but output is not BS3 formatted.
-    #       If ':tag_wrapper=>:bs3, :wrapper=>nil' is added, then the correct output is produced and test passes.
-    #       QUESTION: how to make this the default on a { :config=>:bs3 } form when using { :as=>radio }???
-        
-    @b.input(:platinum, :as=>:radio).to_s.must_equal '<div class="radio"><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
-    # @b.input(:platinum, :as=>:radio, :tag_wrapper=>:bs3, :wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
+    @b.input(:platinum, :as=>:radio, :tag_wrapper=>:bs3, :wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
+    @b.input(:platinum, :as=>:radio).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
+    @c.input(:platinum, :as=>:radio, :tag_wrapper=>:bs3, :wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
     @c.input(:platinum, :as=>:radio).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
-    # @c.input(:platinum, :as=>:radio, :tag_wrapper=>:bs3, :wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
   end
 
   it "should wrap both inputs if :as=>:radio is used" do
