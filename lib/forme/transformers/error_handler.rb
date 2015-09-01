@@ -42,9 +42,43 @@ module Forme
       case input.type
       when :submit
         [tag]
+      when :select
+        input.opts[:wrapper] = :bs3
+        # Moved this to Wrapper::Bootstrap3 instead. Kept temporarily
+        # if input.opts[:wrapper_attr]
+        #   Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        # else
+        #   input.opts[:wrapper_attr] = { :class => ['has-error'] }
+        # end
+        [ tag, input.tag(:span, attr, input.opts[:error]) ]
       when :checkbox, :radio
-        # TODO: Bug: missing support for :wrapper=>:bs3 here (should wrap input in div.checkbox/radio tags)
-        input.tag(:div, {:class => 'has-error'}, [tag, input.tag(:span, attr, input.opts[:error])])
+        # input.opts[:wrapper] = :div
+        # if input.opts[:wrapper_attr]
+        #   Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        # else
+        #   input.opts[:wrapper_attr] = { :class => ['has-error'] }
+        # end
+        [ tag, input.tag(:span, attr, input.opts[:error]) ]
+        
+        # TODO: BUG: checkboxset / radioset (or single checkbox/radio) are missing support for 
+        #       wrapping output in a <div class="has-error">...</div> tag.
+        # 
+        # Expected output format should be:
+        # 
+        #   <div class="has-error">
+        #     <div class="checkbox/radio">
+        #       <label>
+        #         <input ...>
+        #       </label>
+        #     </div>
+        #     <div class="checkbox/radio">
+        #       <label>
+        #         <input ...>
+        #       </label>
+        #     </div>
+        #     <span class="help-block with-errors">Message...</span>
+        #   </div>
+        
       else
         [tag, input.tag(:span, attr, input.opts[:error])]
       end
