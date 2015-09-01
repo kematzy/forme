@@ -341,76 +341,75 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should create set of radio buttons" do
-    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
-    @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> 3</label></div>'
   end
 
   it "should create set of radio buttons with options and values" do
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should create set of radio buttons with options and values with hashes" do
-    @f.input(:radioset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input foo="1" type="radio" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="radio" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="radio" value="c"/> c</label></div>'
+    @f.input(:radioset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="radio"><label class="option"><input foo="1" type="radio" value="a"/> a</label></div><div class="radio"><label class="option"><input checked="checked" class="foo" type="radio" value="2"/> b</label></div><div class="radio"><label class="option" for="baz"><input id="baz" type="radio" value="c"/> c</label></div>'
   end
 
   it "should create set of radio buttons with options and values using given method" do
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
-    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value="a"/> 1</label><label class="option"><input checked="checked" type="radio" value="b"/> 2</label><label class="option"><input type="radio" value="c"/> 3</label></div>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value="a"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="b"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="c"/> 3</label></div>'
   end
 
   it "should support :add_blank option for radioset inputs" do
-    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value=""/> </label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value=""/> </label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should use :add_blank option value as prompt if it is a String" do
-    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="radio" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label></div>'
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="radio"><label class="option"><input type="radio" value=""/> Prompt Here</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div>'
   end
 
   it "should respect the :key option for radio sets" do
-    @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label></div>'
+    @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="radio"><label class="option" for="foo_1"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label></div><div class="radio"><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option" for="foo_3"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label></div>'
   end
 
   it "should create set of radio buttons with fieldsets and legends for :optgroups" do
-    @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="form-group"><fieldset><legend>d</legend><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="radio" value="3"/> c</label></fieldset></div>'
+    @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div></fieldset><fieldset><legend>e</legend><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div></fieldset>'
   end
   
   it "should create set of checkbox buttons" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
-    @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should create set of checkbox buttons with options and values" do
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should create set of checkbox buttons with options and values with hashes" do
-    @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option" for="baz"><input id="baz" type="checkbox" value="c"/> c</label></div>'
+    @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input foo="1" type="checkbox" value="a"/> a</label></div><div class="checkbox"><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label></div><div class="checkbox"><label class="option" for="baz"><input id="baz" type="checkbox" value="c"/> c</label></div>'
   end
   
   it "should create set of checkbox buttons with options and values using given method" do
-    # TODO:verify that BS3 does nothing here.
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
-    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value="a"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="b"/> 2</label><label class="option"><input type="checkbox" value="c"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value="a"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="b"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="c"/> 3</label></div>'
   end
   
   it "should support :add_blank option for checkboxset inputs" do
-    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value=""/> </label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value=""/> </label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should use :add_blank option value as prompt if it is a String" do
-    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="form-group"><label class="option"><input type="checkbox" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.must_equal '<div class="checkbox"><label class="option"><input type="checkbox" value=""/> Prompt Here</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> c</label></div>'
   end
 
   it "should respect the :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.must_equal '<div class="checkbox"><label class="option" for="foo_1"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option" for="foo_3"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should prefer the :name option to :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="foo_1"><input id="foo_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="foo_3"><input id="foo_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :value=>2).to_s.must_equal '<div class="checkbox"><label class="option" for="foo_1"><input id="foo_1" name="bar[]" type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option" for="foo_2"><input checked="checked" id="foo_2" name="bar[]" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option" for="foo_3"><input id="foo_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
   end
   
   it "should prefer the :name and :id option to :key option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :id=>:baz, :value=>2).to_s.must_equal '<div class="form-group"><label class="option" for="baz_1"><input id="baz_1" name="bar[]" type="checkbox" value="1"/> 1</label><label class="option" for="baz_2"><input checked="checked" id="baz_2" name="bar[]" type="checkbox" value="2"/> 2</label><label class="option" for="baz_3"><input id="baz_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :name=>'bar[]', :id=>:baz, :value=>2).to_s.must_equal '<div class="checkbox"><label class="option" for="baz_1"><input id="baz_1" name="bar[]" type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option" for="baz_2"><input checked="checked" id="baz_2" name="bar[]" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option" for="baz_3"><input id="baz_3" name="bar[]" type="checkbox" value="3"/> 3</label></div>'
   end
 
   it "should respect the :error option for checkbox sets" do
@@ -418,11 +417,11 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should create set of checkbox buttons with fieldsets and legends for optgroups" do
-    @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="form-group"><fieldset><legend>d</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="checkbox" value="3"/> c</label></fieldset></div>'
+    @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></div></fieldset><fieldset><legend>e</legend><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> c</label></div></fieldset>'
   end
 
   it "should raise an Error for empty checkbox sets" do
-    @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.must_equal '<div class="form-group"><span class="error_message">foo</span></div>'
+    @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.must_equal '<span class="error_message">foo</span>'
   end
   
   it "radio and checkbox inputs should handle :checked option" do
