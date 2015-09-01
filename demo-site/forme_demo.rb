@@ -158,7 +158,7 @@ class FormeDemo < Roda
 
             r.is 'alt_assoc' do
               @page_title = 'Album Basic - Association Radios/Checkboxes'
-              @form_opts_base = {:config=>:bs3, :many=>{:as=>:checkbox, :tag_wrapper=>:bs3, :wrapper=>nil}, :one=>{:as=>:radio, :tag_wrapper=>:bs3, :wrapper=>nil}}
+              @form_opts_base = {:config=>:bs3, :many=>{:as=>:checkbox}, :one=>{:as=>:radio} }
               @css = ""
               demo :album_basic
             end
