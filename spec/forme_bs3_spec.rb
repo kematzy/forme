@@ -479,19 +479,19 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should automatically note the input has errors if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<div class="form-group has-error"><input class="form-control" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should add an error message after the label" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control error" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<div class="form-group has-error"><label>Foo</label> <input class="form-control error" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should add to existing :class option if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<div class="form-group"><input class="form-control bar" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
+    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<div class="form-group has-error"><input class="form-control bar" type="text" value="foo"/><span class="help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "should respect :error_attr option for setting the attributes for the error message span" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<div class="form-group"><input class="form-control" type="text" value="foo"/><span class="foo help-block with-errors">Bad Stuff!</span></div>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<div class="form-group has-error"><input class="form-control" type="text" value="foo"/><span class="foo help-block with-errors">Bad Stuff!</span></div>'
   end
 
   it "#open should return an opening tag" do
@@ -649,7 +649,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :error_handler option to use a custom error_handler" do
-    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><textarea class="form-control error" id="foo"></textarea>!!! bar</div>'
+    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group has-error"><textarea class="form-control error" id="foo"></textarea>!!! bar</div>'
   end
 
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
@@ -666,7 +666,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :error_handler=>nil option to not use an error_handler" do
-    @f.input(:textarea, :error_handler=>nil, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><textarea class="form-control error" id="foo"></textarea></div>'
+    @f.input(:textarea, :error_handler=>nil, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group has-error"><textarea class="form-control error" id="foo"></textarea></div>'
   end
 
   it "#inputs should accept a :inputs_wrapper=>nil option to not use an inputs_wrapper" do

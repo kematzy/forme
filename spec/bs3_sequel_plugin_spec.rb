@@ -21,7 +21,7 @@ describe "Forme Sequel::Model BS3 forms" do
     def @ab.db_schema
       super.merge(:foo=>{:type=>:bar})
     end
-    @b.input(:foo, :value=>'baz').to_s.must_equal '<div class="form-group bar"><label for="album_foo">Foo</label> <input class="form-control" id="album_foo" name="album[foo]" type="text" value="baz"/></div>'
+    @b.input(:foo, :value=>'baz').to_s.must_equal '<div class="bar form-group"><label for="album_foo">Foo</label> <input class="form-control" id="album_foo" name="album[foo]" type="text" value="baz"/></div>'
   end
 
   it "should allow an array of classes" do
@@ -49,32 +49,32 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use date inputs for Dates" do
-    @b.input(:release_date).to_s.must_equal '<div class="form-group date"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
+    @b.input(:release_date).to_s.must_equal '<div class="date form-group"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
   end
 
   it "should use datetime inputs for Time" do
-    @b.input(:created_at).to_s.must_match %r{<div class="form-group datetime"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album\[created_at\]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>}
+    @b.input(:created_at).to_s.must_match %r{<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album\[created_at\]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>}
   end
 
   it "should use datetime inputs for DateTimes" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
-    @b.input(:created_at).to_s.must_equal '<div class="form-group datetime"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
+    @b.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
   end
 
   it "should include type as wrapper class" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
     f = Forme::Form.new(@ab, :config=>:bs3)
     f.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="b"/></div>'
-    f.input(:release_date).to_s.must_equal '<div class="form-group date"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
-    f.input(:created_at).to_s.must_equal '<div class="form-group datetime"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
+    f.input(:release_date).to_s.must_equal '<div class="date form-group"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
+    f.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
   end
 
   it "should include required * in label if required" do
-    @b.input(:name, :required=>true).to_s.must_equal '<div class="form-group string required"><label for="album_name">Name <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name, :required=>true).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should add required to label even if :label option specified" do
-    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<div class="form-group string required"><label for="album_name">Foo <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<div class="form-group required string"><label for="album_name">Foo <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should include required wrapper class if required" do
@@ -83,30 +83,30 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use a select box for tri-valued boolean fields" do
-    @b.input(:gold).to_s.must_equal '<div class="form-group boolean"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
-    @c.input(:gold).to_s.must_equal '<div class="form-group boolean"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></div>'
+    @b.input(:gold).to_s.must_equal '<div class="boolean form-group"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
+    @c.input(:gold).to_s.must_equal '<div class="boolean form-group"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></div>'
   end
 
   it "should respect :true_label and :false_label options for tri-valued boolean fields" do
-    @b.input(:gold, :true_label=>"Foo", :false_label=>"Bar").to_s.must_equal '<div class="form-group boolean"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="t">Foo</option><option selected="selected" value="f">Bar</option></select></div>'
+    @b.input(:gold, :true_label=>"Foo", :false_label=>"Bar").to_s.must_equal '<div class="boolean form-group"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="t">Foo</option><option selected="selected" value="f">Bar</option></select></div>'
   end
 
   it "should respect :true_value and :false_value options for tri-valued boolean fields" do
-    @b.input(:gold, :true_value=>"Foo", :false_value=>"Bar").to_s.must_equal '<div class="form-group boolean"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="Foo">True</option><option value="Bar">False</option></select></div>'
+    @b.input(:gold, :true_value=>"Foo", :false_value=>"Bar").to_s.must_equal '<div class="boolean form-group"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value=""></option><option value="Foo">True</option><option value="Bar">False</option></select></div>'
   end
 
   it "should respect :add_blank option for tri-valued boolean fields" do
-    @b.input(:gold, :add_blank=>'NULL').to_s.must_equal '<div class="form-group boolean"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value="">NULL</option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
+    @b.input(:gold, :add_blank=>'NULL').to_s.must_equal '<div class="boolean form-group"><label for="album_gold">Gold</label> <select class="form-control" id="album_gold" name="album[gold]"><option value="">NULL</option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
   end
 
   it "should use a select box for dual-valued boolean fields where :required => false" do
-    @b.input(:platinum, :required=>false).to_s.must_equal '<div class="form-group boolean"><label for="album_platinum">Platinum</label> <select class="form-control" id="album_platinum" name="album[platinum]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
-    @c.input(:platinum, :required=>false).to_s.must_equal '<div class="form-group boolean"><label for="album_platinum">Platinum</label> <select class="form-control" id="album_platinum" name="album[platinum]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></div>'
+    @b.input(:platinum, :required=>false).to_s.must_equal '<div class="boolean form-group"><label for="album_platinum">Platinum</label> <select class="form-control" id="album_platinum" name="album[platinum]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></div>'
+    @c.input(:platinum, :required=>false).to_s.must_equal '<div class="boolean form-group"><label for="album_platinum">Platinum</label> <select class="form-control" id="album_platinum" name="album[platinum]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></div>'
   end
 
   it "should use a checkbox for dual-valued boolean fields" do
-    @b.input(:platinum).to_s.must_equal '<div class="checkbox boolean"><label for="album_platinum"><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label></div>'
-    @c.input(:platinum).to_s.must_equal '<div class="checkbox boolean"><label for="album_platinum"><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label></div>'
+    @b.input(:platinum).to_s.must_equal '<div class="boolean checkbox"><label for="album_platinum"><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label></div>'
+    @c.input(:platinum).to_s.must_equal '<div class="boolean checkbox"><label for="album_platinum"><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label></div>'
   end
 
   it "should use radio buttons for boolean fields if :as=>:radio is used" do
@@ -138,21 +138,21 @@ describe "Forme Sequel::Model BS3 forms" do
     @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />').to_s.must_equal '<span class="set-label">Foo:&lt;br /&gt;</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
     @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />', :wrapper=>nil).to_s.must_equal '<span class="set-label">Foo:&lt;br /&gt;</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div>'
     @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />', :wrapper=>:li).to_s.must_equal '<li class="boolean"><span class="set-label">Foo:&lt;br /&gt;</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div></li>'
-    @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />', :wrapper=>:bs3).to_s.must_equal '<div class="form-group boolean"><span class="set-label">Foo:&lt;br /&gt;</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div></div>'
+    @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />', :wrapper=>:bs3).to_s.must_equal '<div class="boolean form-group"><span class="set-label">Foo:&lt;br /&gt;</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div></div>'
   end
   
   it "should respect :true_label and :false_label options for boolean fields if :as=>:radio is used" do
     @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar").to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label></div>'
     @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar",:wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label></div>'
     @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar",:wrapper=>:li).to_s.must_equal '<li class="boolean"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label></div></li>'
-    @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar",:wrapper=>:bs3).to_s.must_equal '<div class="form-group boolean"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label></div></div>'
+    @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar",:wrapper=>:bs3).to_s.must_equal '<div class="boolean form-group"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label></div></div>'
   end
 
   it "should respect :true_value and :false_value options for boolean fields if :as=>:radio is used" do
     @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar").to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label></div>'
     @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar", :wrapper=>nil).to_s.must_equal '<span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label></div>'
     @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar", :wrapper=>:li).to_s.must_equal '<li class="boolean"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label></div></li>'
-    @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar", :wrapper=>:bs3).to_s.must_equal '<div class="form-group boolean"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label></div></div>'
+    @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar", :wrapper=>:bs3).to_s.must_equal '<div class="boolean form-group"><span class="set-label">Platinum</span><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label></div></div>'
   end
 
   it "should use a select box for many_to_one associations" do
@@ -321,7 +321,7 @@ describe "Forme Sequel::Model BS3 forms" do
 
   it "should handle errors on methods not backed by columns" do
     @ab.errors.add(:artist_name, 'foo')
-    @b.input(:artist_name).to_s.must_equal '<div class="form-group"><label for="album_artist_name">Artist name</label> <input class="form-control error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/><span class="help-block with-errors">foo</span></div>'
+    @b.input(:artist_name).to_s.must_equal '<div class="form-group has-error"><label for="album_artist_name">Artist name</label> <input class="form-control error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/><span class="help-block with-errors">foo</span></div>'
   end
 
   it "should respect a :type option with a schema type as the input type for methods not backed by columns" do
@@ -336,12 +336,12 @@ describe "Forme Sequel::Model BS3 forms" do
 
   it "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
-    @b.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control error" id="album_name" name="album[name]" type="text" value="b"/><span class="help-block with-errors">tis not valid</span></div>'
+    @b.input(:name).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <input class="form-control error" id="album_name" name="album[name]" type="text" value="b"/><span class="help-block with-errors">tis not valid</span></div>'
   end
 
   it "should correctly show an error message for many_to_one associations if there is one" do
     @ab.errors.add(:artist_id, 'tis not valid')
-    @b.input(:artist).to_s.must_equal '<div class="form-group many_to_one"><label for="album_artist_id">Artist</label> <select class="form-control error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="help-block with-errors">tis not valid</span></div>'
+    @b.input(:artist).to_s.must_equal '<div class="form-group has-error many_to_one"><label for="album_artist_id">Artist</label> <select class="form-control error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="help-block with-errors">tis not valid</span></div>'
   end
 
   it "should raise an error for unhandled associations" do
@@ -370,7 +370,7 @@ describe "Forme Sequel::Model BS3 forms" do
 
   it "should add required attribute if the column doesn't support nil values" do
     def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
-    @b.input(:name).to_s.must_equal '<div class="form-group string required"><label for="album_name">Name <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name <abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should use allow nested forms with many_to_one associations" do
@@ -491,7 +491,7 @@ describe "Forme Sequel plugin default input types based on column type" do
   end
 
   it "should use password input with no value for string columns with name password" do
-    f(File).to_s.must_equal '<div class="form-group blob"><label for="test_foo">Foo</label> <input id="test_foo" name="test[foo]" type="file"/></div>'
+    f(File).to_s.must_equal '<div class="blob form-group"><label for="test_foo">Foo</label> <input id="test_foo" name="test[foo]" type="file"/></div>'
   end
 end
 
