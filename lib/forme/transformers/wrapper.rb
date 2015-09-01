@@ -32,18 +32,25 @@ module Forme
 
     def call(tag, input)
       attr = input.opts[:wrapper_attr] ? input.opts[:wrapper_attr].dup : { }
+      klass = attr[:class] ? attr[:class].split(' ').unshift('form-group').uniq : ['form-group']
+      klass.unshift('has-error') if input.opts[:error]
 
       case input.type
+      when :submit, :reset
+        klass.delete('has-error')
+        attr[:class] = klass.sort.uniq.join(' ').strip
+        attr.delete(:class) if attr[:class].empty?
+        [input.tag(:div, attr, tag)]
       when :radio, :checkbox
-        t = input.type.to_s
-        klass = attr[:class] ? "#{t} #{attr[:class].to_s}" : ''
-        attr[:class] = "#{t} #{klass.gsub(/\s*#{t}\s*/,'')}".strip
+        klass.unshift( input.type.to_s )
+        klass.delete('form-group')
+        klass.delete('has-error')
+        attr[:class] = klass.sort.uniq.join(' ').strip
         [input.tag(:div, attr, tag)]
       when :hidden
         super
       else
-        klass = attr[:class] ? "form-group #{attr[:class].to_s}" : ''
-        attr[:class] = "form-group #{klass.gsub(/\s*form-group\s*/,'')}".strip
+        attr[:class] = klass.sort.uniq.join(' ').strip
         [input.tag(:div, attr, tag)]
       end
 
