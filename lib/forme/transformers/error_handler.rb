@@ -38,6 +38,7 @@ module Forme
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
       Forme.attr_classes(attr, 'help-block with-errors')
+      return [tag] if input.opts[:skip_error_message]
 
       case input.type
       when :submit

@@ -61,8 +61,8 @@ module Forme
       normalize_options
 
       tag = convert_to_tag(input.type)
-      tag = wrap_tag_with_label(tag) if input.opts[:label]
-      tag = wrap_tag_with_error(tag) if input.opts[:error]
+      tag = wrap_tag_with_label(tag) if @opts[:label]
+      tag = wrap_tag_with_error(tag) if @opts[:error]
       tag = wrap(:helper, tag) if input.opts[:help]
       wrap_tag(tag)
     end
@@ -246,16 +246,20 @@ module Forme
       end
 
       if @opts[:set_error]
-        if (last_input = tags.last) && last_input.is_a?(Input)
-          last_input.opts[:error] = @opts[:set_error]
-        else
-          tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
-        end
+       _add_set_error(tags)
       end
 
       tags.unshift(form._tag(:span, {:class=>'set-label'}, @opts[:set_label])) if @opts[:set_label]
 
       tags
+    end
+
+    def _add_set_error(tags)
+      if (last_input = tags.last) && last_input.is_a?(Input)
+        last_input.opts[:error] = @opts[:set_error]
+      else
+        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+      end
     end
 
     # Formats a textarea.  Respects the following options:
@@ -509,6 +513,33 @@ module Forme
     # Use a span with text instead of a text area.
     def format_textarea
       tag(:span, {}, @attr[:value])
+    end
+  end
+
+  class Formatter::Bs3 < Formatter
+    Forme.register_transformer(:formatter, :bs3, self)
+
+    private
+
+    def _add_set_error(tags)
+      if (last_input = tags.last) && last_input.is_a?(Input)
+        @opts[:error] = last_input.opts[:error] = @opts[:set_error]
+        last_input.opts[:skip_error_message] = true
+      else
+        super
+      end
+    end
+
+    def format_radioset
+      @opts[:wrapper_attr] ||= {}
+      Forme.attr_classes(@opts[:wrapper_attr], "has-error")
+      super
+    end
+
+    def format_checkboxset
+      @opts[:wrapper_attr] ||= {}
+      Forme.attr_classes(@opts[:wrapper_attr], "has-error")
+      super
     end
   end
   

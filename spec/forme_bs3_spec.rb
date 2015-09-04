@@ -413,10 +413,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should respect the :error option for checkbox sets" do
-    # TODO: INCORRECT OUTPUT: Missing 'has-error' on :wrapper tag
-    
     @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo-checkboxset', :value=>2).to_s.must_equal '<div class="has-error"><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input class="error" type="checkbox" value="3"/> 3</label></div><span class="help-block with-errors">foo-checkboxset</span></div>'
-    # actual INCORRECT output                                                                         '<div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><div class="has-error"><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="help-block with-errors">foo-checkboxset</span></div></div>'
   end
 
   it "should create set of checkbox buttons with fieldsets and legends for optgroups" do
