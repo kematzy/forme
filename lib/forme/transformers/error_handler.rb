@@ -30,10 +30,9 @@ module Forme
 
     # Return tag with error message span tag after it.
     def call(tag, input)
-      # delete .error on tag for full BS3 support
       if tag.is_a?(Tag)
         tag.attr[:class] = tag.attr[:class].to_s.gsub(/\s*error\s*/,'')
-        tag.attr.delete(:class) if tag.attr[:class].empty?
+        tag.attr.delete(:class) if tag.attr[:class].to_s == ''
       end
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
@@ -43,44 +42,43 @@ module Forme
       case input.type
       when :submit
         [tag]
+      when :textarea
+        input.opts[:wrapper] = :bs3
+        if input.opts[:wrapper_attr]
+          Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        else
+          input.opts[:wrapper_attr] = { :class => 'has-error' }
+        end
+        [ tag, input.tag(:span, attr, input.opts[:error]) ]
+        
       when :select
         input.opts[:wrapper] = :bs3
-        # Moved this to Wrapper::Bootstrap3 instead. Kept temporarily
-        # if input.opts[:wrapper_attr]
-        #   Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
-        # else
-        #   input.opts[:wrapper_attr] = { :class => ['has-error'] }
-        # end
+        if input.opts[:wrapper_attr]
+          Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        else
+          input.opts[:wrapper_attr] = { :class => 'has-error' }
+        end
         [ tag, input.tag(:span, attr, input.opts[:error]) ]
+        
       when :checkbox, :radio
-        # input.opts[:wrapper] = :div
-        # if input.opts[:wrapper_attr]
-        #   Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
-        # else
-        #   input.opts[:wrapper_attr] = { :class => ['has-error'] }
-        # end
-        [ tag, input.tag(:span, attr, input.opts[:error]) ]
         
-        # TODO: BUG: checkboxset / radioset (or single checkbox/radio) are missing support for 
-        #       wrapping output in a <div class="has-error">...</div> tag.
-        # 
-        # Expected output format should be:
-        # 
-        #   <div class="has-error">
-        #     <div class="checkbox/radio">
-        #       <label>
-        #         <input ...>
-        #       </label>
-        #     </div>
-        #     <div class="checkbox/radio">
-        #       <label>
-        #         <input ...>
-        #       </label>
-        #     </div>
-        #     <span class="help-block with-errors">Message...</span>
-        #   </div>
+        input.opts[:wrapper] = :div
+        if input.opts[:wrapper_attr]
+          Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        else
+          input.opts[:wrapper_attr] = { :class => 'has-error' }
+        end
         
+        [ 
+          input.tag(:div, { :class=> "#{input.type.to_s}" }, [tag] ), 
+          input.tag(:span, {:class=>'help-block with-errors'}, input.opts[:error]) 
+        ]
       else
+        if input.opts[:wrapper_attr]
+          Forme.attr_classes(input.opts[:wrapper_attr], 'has-error')
+        else
+          input.opts[:wrapper_attr] = { :class => 'has-error' }
+        end
         [tag, input.tag(:span, attr, input.opts[:error])]
       end
     end
