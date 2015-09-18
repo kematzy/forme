@@ -42,7 +42,6 @@ module Forme
         [tag]
       when :radio, :checkbox
         klass.delete('form-group')
-        klass.delete('has-error')
         klass.unshift( input.type.to_s )
         attr[:class] = klass.sort.uniq.join(' ').strip
         [input.tag(:div, attr, tag)]
@@ -50,7 +49,7 @@ module Forme
         super
       else
         attr[:class] = klass.sort.uniq.join(' ').strip
-        [input.tag(:div, attr, tag)]
+        [input.tag(:div, attr, [tag])]
       end
 
     end

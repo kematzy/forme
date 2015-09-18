@@ -71,7 +71,7 @@ module Forme
         
         [ 
           input.tag(:div, { :class=> "#{input.type.to_s}" }, [tag] ), 
-          input.tag(:span, {:class=>'help-block with-errors'}, input.opts[:error]) 
+          input.tag(:span, attr, input.opts[:error]) 
         ]
       else
         if input.opts[:wrapper_attr]
