@@ -379,14 +379,19 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:checkboxset, :options=>[]).to_s.must_equal '<div class="checkboxset"></div>'
   end
   
-  it "should correctly handle a :checkboxset tag with an error" do
+  it "should correctly handle a :checkboxset tag with an error - Alternative A: (see BS3 HTML reference)" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b,2]], :error=>'error message').to_s.must_equal '<div class="checkboxset has-error"><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div>'
   end
-  
-  it "should correctly handle a :checkboxset tag with an error and label" do
+
+  it "should correctly handle a :checkboxset tag with an error and label - Alternative A: (see BS3 HTML reference)" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b,2]], :error=>'error message', :label=>'CheckboxSet').to_s.must_equal '<div class="checkboxset has-error"><label>CheckboxSet</label><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div>'
   end
-  
+
+  it "should correctly handle a :checkboxset tag with an error and label - Alternative B: (see BS3 HTML reference)" do
+    skip('test kept for reference of alternative output')
+    # NOTE! the expected output in this test is the basic unaltered :checkbox output format for each :checkbox. This may be the more correct output??
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b,2]], :error=>'error message', :label=>'CheckboxSet').to_s.must_equal '<div class="checkboxset has-error"><label>CheckboxSet</label><div class="has-error"><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><span class="help-block with-errors">error message</span></div><div class="has-error"><div class="checkbox"><label class="option"><input type="checkbox" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div></div>'
+  end
   
   it "should correctly handle a :radioset tag" do
     @f.input(:radioset, :options=>[[:a, 1], [:b,2]]).to_s.must_equal '<div class="radioset"><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input type="radio" value="2"/> b</label></div></div>'
@@ -396,12 +401,18 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:radioset, :options=>[]).to_s.must_equal '<div class="radioset"></div>'
   end
   
-  it "should correctly handle a :radioset tag with an error" do
+  it "should correctly handle a :radioset tag with an error - Alternative A: (see BS3 HTML reference)" do
     @f.input(:radioset, :options=>[[:a, 1], [:b,2]], :error=>'error message').to_s.must_equal '<div class="radioset has-error"><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input type="radio" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div>'
   end
   
-  it "should correctly handle a :radioset tag with an error and label" do
+  it "should correctly handle a :radioset tag with an error and label - Alternative A: (see BS3 HTML reference)" do
     @f.input(:radioset, :options=>[[:a, 1], [:b,2]], :error=>'error message', :label=>'RadioSet').to_s.must_equal '<div class="radioset has-error"><label>RadioSet</label><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input type="radio" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div>'
+  end
+  
+  it "should correctly handle a :radioset tag with an error and label - Alternative B: (see BS3 HTML reference)" do
+    skip('test kept for reference of alternative output')
+    # NOTE! the expected output in this test is the basic unaltered :radio output format for each :radio. This may be the more correct output???
+    @f.input(:radioset, :options=>[[:a, 1], [:b,2]], :error=>'error message', :label=>'RadioSet').to_s.must_equal '<div class="radioset has-error"><label>RadioSet</label><div class="has-error"><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><span class="help-block with-errors">error message</span></div><div class="has-error"><div class="radio"><label class="option"><input type="radio" value="2"/> b</label></div><span class="help-block with-errors">error message</span></div></div>'
   end
   
   
