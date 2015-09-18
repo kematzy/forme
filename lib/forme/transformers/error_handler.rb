@@ -40,7 +40,7 @@ module Forme
       return [tag] if input.opts[:skip_error_message]
 
       case input.type
-      when :submit
+      when :submit, :reset
         [tag]
       when :textarea
         input.opts[:wrapper] = :bs3
@@ -70,7 +70,7 @@ module Forme
         end
         
         [ 
-          input.tag(:div, { :class=> "#{input.type.to_s}" }, [tag] ), 
+          input.tag(:div, { :class=> input.type.to_s }, [tag] ), 
           input.tag(:span, attr, input.opts[:error]) 
         ]
       else

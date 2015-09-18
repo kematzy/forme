@@ -153,6 +153,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     it "should create an input[:submit] tag with the correct id" do
       @f.input(:submit, :value=>'Save', :id=>'foo').to_s.must_equal '<input class="btn btn-default" id="foo" type="submit" value="Save"/>'
     end
+    
+    it "should create an input[:submit] tag without error message " do
+      @f.input(:submit, :value=>'Save', :id=>'foo', :error=>'error-message').to_s.must_equal '<input class="btn btn-default" id="foo" type="submit" value="Save"/>'
+    end
   
   end
   
@@ -173,6 +177,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
   
     it "should create an input[:reset] tag with the correct id" do
       @f.input(:reset, :value=>'Save', :id=>'foo').to_s.must_equal '<input class="btn btn-default" id="foo" type="reset" value="Save"/>'
+    end
+  
+    it "should create an input[:reset] tag without error message " do
+      @f.input(:reset, :value=>'Save', :id=>'foo', :error=>'error-message').to_s.must_equal '<input class="btn btn-default" id="foo" type="reset" value="Save"/>'
     end
   
   end
